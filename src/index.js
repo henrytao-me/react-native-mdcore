@@ -8,8 +8,10 @@ import * as utils from './libs/utils'
 const DarkTheme = Themes.Dark
 const LightTheme = Themes.Light
 
+export * from './components'
+
 export {
-  ...Components,
+  Components,
   DarkTheme,
   LightTheme,
   Resolver,

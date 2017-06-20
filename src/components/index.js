@@ -2,7 +2,7 @@ import { Component } from 'react'
 export { Component }
 
 import {
-  AppState, Animated,
+  AppRegistry, AppState, Animated,
   Easing,
   FlatList,
   InteractionManager,
@@ -14,7 +14,7 @@ import {
   WebView
 } from 'react-native'
 export {
-  AppState, Animated,
+  AppRegistry, AppState, Animated,
   Easing,
   FlatList,
   InteractionManager,

@@ -6,6 +6,10 @@ export default class StyleSheet {
     return new StyleSheet(creator)
   }
 
+  static _getThemeId(theme) {
+    return theme ? theme.__id : null
+  }
+
   constructor(creator) {
     this._creator = creator
     this._theme = null
@@ -17,15 +21,15 @@ export default class StyleSheet {
   get(theme, ...args) {
     if (this._shouldRenewCache(theme, args)) {
       this._theme = theme
-      this._themeId = theme.__id
+      this._themeId = this.constructor._getThemeId(theme)
       this._args = args
       this._style = this._creator(this._theme, ...this._args)
     }
     return this._style
   }
 
-  _shouldRenewCache(theme, ...args) {
-    if (theme !== undefined && (theme !== this._theme || theme.__id !== this._themeId || !Utils.deepEqual(args, this._args))) {
+  _shouldRenewCache(theme = null, ...args) {
+    if (theme !== this._theme || this.constructor._getThemeId(theme) !== this._themeId || !Utils.deepEqual(args, this._args)) {
       return true
     }
     return false

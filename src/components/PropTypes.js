@@ -1,25 +1,12 @@
-import { PropTypes } from 'react'
+import PropTypes from 'prop-types'
 
 export default Object.assign({}, PropTypes, {
-  color: PropTypes.string,
-  opacity: PropTypes.number,
-
+  color: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.func
+  ]),
   ellipsizeMode: PropTypes.oneOf(['head', 'middle', 'tail', 'clip']),
-  iconColor: PropTypes.string,
-  iconName: PropTypes.string,
-  iconSet: PropTypes.string,
-  imageRadius: PropTypes.oneOfType([
-    PropTypes.number,
-    PropTypes.oneOf(['auto'])
-  ]),
-  imageResizeMode: PropTypes.oneOf(['cover', 'contain', 'stretch', 'center']),
-  imageScaleType: PropTypes.oneOf(['width', 'height', 'none']),
-  imageSource: PropTypes.oneOfType([
-    PropTypes.shape({
-      uri: PropTypes.string
-    }),
-    PropTypes.number
-  ]),
+  opacity: PropTypes.number,
   palette: PropTypes.oneOf(['primary', 'primaryDark', 'primaryLight', 'accent', 'accentDark', 'accentLight', 'warn', 'warnDark', 'warnLight', 'background', 'backgroundDark', 'backgroundLight']),
   style: PropTypes.oneOfType([
     PropTypes.object,
@@ -34,5 +21,19 @@ export default Object.assign({}, PropTypes, {
   view: PropTypes.oneOfType([
     PropTypes.element,
     PropTypes.func
+  ]),
+
+
+  imageRadius: PropTypes.oneOfType([
+    PropTypes.number,
+    PropTypes.oneOf(['auto'])
+  ]),
+  imageResizeMode: PropTypes.oneOf(['cover', 'contain', 'stretch', 'center']),
+  imageScaleType: PropTypes.oneOf(['width', 'height', 'none']),
+  imageSource: PropTypes.oneOfType([
+    PropTypes.shape({
+      uri: PropTypes.string
+    }),
+    PropTypes.number
   ])
 })

@@ -8,17 +8,18 @@ import RNButton from './internal/Button'
 export default class Button extends PureComponent {
 
   static contextTypes = {
-    theme: PropTypes.object
+    theme: PropTypes.any
   }
 
   static propTypes = {
-    palette: PropTypes.oneOf(['primary', 'accent', 'warn', 'background']),
+    palette: PropTypes.palette,
     title: PropTypes.string.isRequired,
     type: PropTypes.oneOf(['default', 'borderless']),
     onPress: PropTypes.func.isRequired
   }
 
   static defaultProps = {
+    palette: 'background',
     type: 'default'
   }
 

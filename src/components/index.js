@@ -5,9 +5,9 @@ import {
   AppRegistry, AppState, Animated,
   Easing,
   FlatList,
-  Image,
   InteractionManager,
   ListView,
+  PixelRatio,
   Platform,
   ScrollView, SectionList, StatusBar,
   TouchableHighlight, TouchableOpacity, TouchableNativeFeedback, TouchableWithoutFeedback,
@@ -18,9 +18,9 @@ export {
   AppRegistry, AppState, Animated,
   Easing,
   FlatList,
-  Image,
   InteractionManager,
   ListView,
+  PixelRatio,
   Platform,
   ScrollView, SectionList, StatusBar,
   TouchableHighlight, TouchableOpacity, TouchableNativeFeedback, TouchableWithoutFeedback,
@@ -34,6 +34,7 @@ export { default as Button } from './Button'
 export { default as Card } from './Card'
 export { default as Divider } from './Divider'
 export { default as Icon } from './Icon'
+export { default as Image } from './Image'
 export { default as NativeModules } from './NativeModules'
 export { default as PropTypes } from './PropTypes'
 export { default as PureComponent } from './PureComponent'

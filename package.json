@@ -25,5 +25,9 @@
   "bugs": {
     "url": "https://github.com/henrytao-me/react-native-mdcore/issues"
   },
-  "homepage": "https://github.com/henrytao-me/react-native-mdcore#readme"
+  "homepage": "https://github.com/henrytao-me/react-native-mdcore#readme",
+  "dependencies": {
+    "react": "16.0.0-alpha.12",
+    "react-native": "0.45.1"
+  }
 }

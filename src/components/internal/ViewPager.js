@@ -97,6 +97,7 @@ class ViewPager extends React.Component {
         directionalLockEnabled={true}
         showsHorizontalScrollIndicator={false}
         showsVerticalScrollIndicator={false}
+        keyboardShouldPersistTaps="always"
         onLayout={this.adjustCardSize}>
         {this.renderContent()}
       </ScrollView>

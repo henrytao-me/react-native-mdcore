@@ -22,18 +22,17 @@ export default Object.assign({}, PropTypes, {
     PropTypes.element,
     PropTypes.func
   ]),
-
-
   imageRadius: PropTypes.oneOfType([
     PropTypes.number,
-    PropTypes.oneOf(['auto'])
+    PropTypes.oneOf(['auto', 'none'])
   ]),
   imageResizeMode: PropTypes.oneOf(['cover', 'contain', 'stretch', 'center']),
   imageScaleType: PropTypes.oneOf(['width', 'height', 'none']),
   imageSource: PropTypes.oneOfType([
+    PropTypes.number,
     PropTypes.shape({
       uri: PropTypes.string
     }),
-    PropTypes.number
+    PropTypes.string,
   ])
 })

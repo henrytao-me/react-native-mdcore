@@ -147,7 +147,11 @@ if (Platform.OS === 'ios') {
 
 const styles = StyleSheet.create({
   button: Platform.select({
-    ios: {},
+    ios: {
+      elevation: 4,
+      backgroundColor: defaultBlue,
+      borderRadius: 2,
+    },
     android: {
       elevation: 4,
       backgroundColor: defaultBlue,

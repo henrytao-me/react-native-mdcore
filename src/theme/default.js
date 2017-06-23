@@ -64,6 +64,7 @@ export default {
   },
   icon: {
     size: 24,
+    sizeSm: 16,
     activeColor: '#0000008A',
     inactiveColor: '#00000061'
   },

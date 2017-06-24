@@ -117,7 +117,7 @@ export default class ViewPager extends Component {
   }
 
   handleHorizontalScroll(e) {
-    const selectedIndex = e.nativeEvent.position
+    let selectedIndex = e.nativeEvent.position
     if (selectedIndex === undefined) {
       selectedIndex = Math.round(
         e.nativeEvent.contentOffset.x / this.state.width,

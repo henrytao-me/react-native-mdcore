@@ -1,6 +1,6 @@
 {
   "name": "react-native-mdcore",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "description": "Material Design for both Android and iOS",
   "main": "index.js",
   "scripts": {

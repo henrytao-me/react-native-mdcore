@@ -4,7 +4,6 @@
   "description": "Material Design for both Android and iOS",
   "main": "index.js",
   "scripts": {
-    "reset": "watchman watch-del-all && rm -rf ./node_modules && rm -rf ./package-lock.json && rm -rf $TMPDIR/react-* && npm install",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -12,14 +11,17 @@
     "url": "git+https://github.com/henrytao-me/react-native-mdcore.git"
   },
   "keywords": [
-    "material",
-    "design",
     "android",
-    "ios",
-    "mdcore",
-    "support",
+    "appcompat",
     "design",
-    "appcompat"
+    "ios",
+    "material",
+    "material-design",
+    "mdcore",
+    "palette",
+    "react",
+    "support",
+    "theme"
   ],
   "author": "Henry Tao <hi@henrytao.me>",
   "license": "Apache-2.0",

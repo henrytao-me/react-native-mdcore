@@ -11,7 +11,7 @@ import PropTypes from 'prop-types'
 export default class ViewPager extends Component {
 
   static propTypes = {
-    bounces: PropTypes.boolean,
+    bounces: PropTypes.any,
     count: PropTypes.number,
     onSelectedIndexChange: PropTypes.func,
     selectedIndex: PropTypes.number

@@ -6,8 +6,6 @@ import PureComponent from './PureComponent'
 
 import * as Utils from '../libs/utils'
 
-import resolveAssetSource from 'resolveAssetSource'
-
 export default class Image extends PureComponent {
 
   static propTypes = {
@@ -65,7 +63,7 @@ export default class Image extends PureComponent {
 
   _getPlaceholder = () => {
     const placeholder = Utils.isString(this.props.placeholder) ? { uri: this.props.placeholder } : this.props.placeholder
-    return resolveAssetSource(placeholder) || { uri: undefined, width: undefined, height: undefined }
+    return RNImage.resolveAssetSource(placeholder) || { uri: undefined, width: undefined, height: undefined }
   }
 
   _getRadius = () => {
@@ -83,7 +81,7 @@ export default class Image extends PureComponent {
 
   _getSource = () => {
     const source = Utils.isString(this.props.source) ? { uri: this.props.source } : this.props.source
-    return resolveAssetSource(source) || { uri: undefined, width: undefined, height: undefined }
+    return RNImage.resolveAssetSource(source) || { uri: undefined, width: undefined, height: undefined }
   }
 
   _getWidth = () => {

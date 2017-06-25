@@ -14,6 +14,11 @@ npm install react-native-mdcore --save
 ```
 
 
+## Sample app 
+
+Checkout [https://github.com/henrytao-me/react-native-workshop](https://github.com/henrytao-me/react-native-workshop)
+
+
 ## Usages
 
 ### Setup ThemeProvider

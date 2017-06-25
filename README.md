@@ -97,6 +97,51 @@ export default class HomeComponent extends PureComponent {
 }
 ```
 
+### All-in-one place
+
+All components are now in `react-native-mdcore` that makes it easiest to remember and use. 
+
+```js
+import React from 'react'
+import {
+  AppRegistry, AppState, Animated,
+  Easing,
+  FlatList,
+  InteractionManager,
+  ListView,
+  PixelRatio,
+  Platform,
+  ScrollView, SectionList, StatusBar,
+  TouchableHighlight, TouchableOpacity, TouchableNativeFeedback, TouchableWithoutFeedback,
+  View, VirtualizedList,
+  WebView,
+
+  BottomNavigation,
+  BottomNavigationItem,
+  Button,
+  Card,
+  Divider,
+  Icon,
+  Image,
+  NativeModules,
+  PropTypes,
+  PureComponent,
+  Ripple,
+  StyleSheet,
+  TabItem,
+  Tabs,
+  Text,
+  ViewPager,
+} from 'react-native-mdcore'
+
+export default class CustomComponent extends PureComponent {
+
+  render() {
+    return null
+  }
+}
+```
+
 
 ## License
 

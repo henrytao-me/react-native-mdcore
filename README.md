@@ -20,13 +20,14 @@ npm install react-native-mdcore --save
 
 Use default theme:
 
-```node
+```js
 import React from 'react'
 import {
+  PureComponent,
   ThemeProvider
 } from 'react-native-mdcore'
 
-class Main extends PureComponent {
+export default class Main extends PureComponent {
 
   render() {
     return (
@@ -40,9 +41,10 @@ class Main extends PureComponent {
 
 Use custom theme:
 
-```node
+```js
 import React from 'react'
 import {
+  PureComponent,
   Theme,
   ThemeProvider
 } from 'react-native-mdcore'
@@ -55,13 +57,41 @@ cons CUSTOM_THEME = Theme.extend({
   }
 })
 
-class Main extends PureComponent {
+export default class Main extends PureComponent {
 
   render() {
     return (
       <ThemeProvider theme={CUSTOM_THEME}>
         <HomeComponent />
       </ThemeProvider>
+    )
+  }
+}
+```
+
+Access theme:
+
+```js
+import React from 'react'
+import {
+  PropTypes,
+  PureComponent, 
+  Text,
+  View
+} from 'react-native-mdcore'
+
+export default class HomeComponent extends PureComponent {
+
+  static contextTypes = {
+    theme: PropTypes.any
+  }
+
+  render() {
+    const { theme } = this.context
+    return (
+      <View style={{ backgroundColor: theme.palette.primary }}>
+        <Text palette="primary">Home</Text>
+      </View>
     )
   }
 }

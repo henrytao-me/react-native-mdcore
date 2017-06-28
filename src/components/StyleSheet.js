@@ -28,10 +28,7 @@ export default class StyleSheet {
     return this._style
   }
 
-  _shouldRenewCache(theme = null, ...args) {
-    if (theme !== this._theme || this.constructor._getThemeId(theme) !== this._themeId || !Utils.deepEqual(args, this._args)) {
-      return true
-    }
-    return false
+  _shouldRenewCache(theme = null, args) {
+    return theme !== this._theme || this.constructor._getThemeId(theme) !== this._themeId || !Utils.deepEqual(args, this._args)
   }
 }

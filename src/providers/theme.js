@@ -5,6 +5,8 @@ import { PropTypes } from '../components'
 import Theme from '../theme'
 import * as Utils from '../libs/utils'
 
+import Loader from './loader'
+
 const LAND = 'land'
 const LDLTR = 'ldltr'
 const LDRTL = 'ldrtl'
@@ -26,6 +28,14 @@ export default class ThemeProvider extends PureComponent {
 
   static defaultProps = {
     theme: Theme
+  }
+
+  static defer = () => {
+    Loader.defer()
+  }
+
+  static ready = () => {
+    Loader.ready()
   }
 
   state = {
@@ -55,7 +65,7 @@ export default class ThemeProvider extends PureComponent {
     Object.assign(theme, this.props.theme.resolve(Object.keys(this.state).map(key => this.props[key] || this.state[key])))
     return (
       <View style={[{ flex: 1, backgroundColor: theme.palette.background }, this.props.style]} onLayout={this._onLayout}>
-        {this.props.children}
+        {this.state._ready && <Loader>{this.props.children}</Loader>}
       </View>
     )
   }
@@ -72,7 +82,7 @@ export default class ThemeProvider extends PureComponent {
     const ratio = PixelRatio.get()
     const widthInDp = width / ratio
     const keys = this.props.theme.getOrderedKeys()
-    const newState = Object.assign({}, this.state, {
+    const newState = Object.assign({ _ready: true }, this.state, {
       smallestWidth: undefined
     })
     keys.forEach(key => {

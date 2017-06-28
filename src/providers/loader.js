@@ -24,6 +24,10 @@ export default class Loader extends PureComponent {
     LISTENERS.splice(0, LISTENERS.length)
   }
 
+  static isReady = () => {
+    return READY
+  }
+
   static ready = () => {
     READY = true
     LISTENERS.forEach(listener => listener())

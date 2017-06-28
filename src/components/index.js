@@ -9,7 +9,7 @@ import {
   ListView,
   PixelRatio,
   Platform,
-  ScrollView, SectionList, StatusBar,
+  ScrollView, SectionList,
   TouchableHighlight, TouchableOpacity, TouchableNativeFeedback, TouchableWithoutFeedback,
   View, VirtualizedList,
   WebView
@@ -22,7 +22,7 @@ export {
   ListView,
   PixelRatio,
   Platform,
-  ScrollView, SectionList, StatusBar,
+  ScrollView, SectionList,
   TouchableHighlight, TouchableOpacity, TouchableNativeFeedback, TouchableWithoutFeedback,
   View, VirtualizedList,
   WebView
@@ -39,6 +39,7 @@ export { default as NativeModules } from './NativeModules'
 export { default as PropTypes } from './PropTypes'
 export { default as PureComponent } from './PureComponent'
 export { default as Ripple } from './Ripple'
+export { default as StatusBar } from './StatusBar'
 export { default as StyleSheet } from './StyleSheet'
 export { default as TabItem } from './TabItem'
 export { default as Tabs } from './Tabs'

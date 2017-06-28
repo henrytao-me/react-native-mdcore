@@ -3,10 +3,13 @@ const { StatusBarManager } = NativeModules
 
 StatusBarManager._getHeight = StatusBarManager.getHeight
 StatusBarManager.getHeight = (callback = (_data) => { }) => {
-  if (Platform.OS === 'ios') {
-    StatusBarManager._getHeight(callback)
-  } else {
-    callback({ height: StatusBarManager.HEIGHT })
+  switch (Platform.OS) {
+    case 'ios':
+      StatusBarManager._getHeight(callback)
+      break
+    case 'android':
+      callback({ height: StatusBarManager.HEIGHT })
+      break
   }
 }
 

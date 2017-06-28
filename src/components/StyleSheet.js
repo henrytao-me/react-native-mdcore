@@ -12,13 +12,13 @@ export default class StyleSheet {
 
   constructor(creator) {
     this._creator = creator
-    this._theme = null
-    this._themeId = null
-    this._args = []
-    this._style = null
+    this._theme = undefined
+    this._themeId = undefined
+    this._args = undefined
+    this._style = undefined
   }
 
-  get(theme, ...args) {
+  get(theme = null, ...args) {
     if (this._shouldRenewCache(theme, args)) {
       this._theme = theme
       this._themeId = this.constructor._getThemeId(theme)

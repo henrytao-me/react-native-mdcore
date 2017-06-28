@@ -49,20 +49,22 @@ export default class BottomNavigation extends PureComponent {
 
   _onItemPress = (index) => {
     this.setState({ index })
-    this.props.onItemSelected({ index })
+    this.props.onItemSelected({ ...this.props, index })
   }
 
   _renderItem = (item, index) => {
     const { theme } = this.context
     const styles = Styles.get(theme, this.props)
     const active = index === this._getIndex()
-    item = item.props.active === active ? item : React.cloneElement(item, { active })
+    item = React.cloneElement(item, {
+      active,
+      tag: index,
+      onPress: this._onItemPress
+    })
     return (
-      <TouchableWithoutFeedback key={index} onPress={() => this._onItemPress(index)}>
-        <View style={styles.item}>
-          {item}
-        </View>
-      </TouchableWithoutFeedback>
+      <View key={index} style={styles.item}>
+        {item}
+      </View>
     )
   }
 }

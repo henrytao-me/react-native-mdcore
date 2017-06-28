@@ -1,4 +1,4 @@
-import { PureComponent } from 'react'
+import { Component } from 'react'
 
 let READY = true
 
@@ -17,7 +17,7 @@ const removeListener = (listener) => {
   }
 }
 
-export default class Loader extends PureComponent {
+export default class Loader extends Component {
 
   static defer = () => {
     READY = false

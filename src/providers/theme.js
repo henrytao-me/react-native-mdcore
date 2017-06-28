@@ -1,7 +1,10 @@
 import React, { PureComponent } from 'react'
 import { AppState, I18nManager, PixelRatio, View } from 'react-native'
 
-import { PropTypes } from '../components'
+import {
+  PropTypes,
+  StyleSheet
+} from '../components'
 import Theme from '../theme'
 import * as Utils from '../libs/utils'
 
@@ -63,8 +66,9 @@ export default class ThemeProvider extends PureComponent {
     const theme = this._theme
     theme.__id = (theme.__id || new Date().getTime()) + 1
     Object.assign(theme, this.props.theme.resolve(Object.keys(this.state).map(key => this.props[key] || this.state[key])))
+    const styles = Styles.get(theme, this.props)
     return (
-      <View style={[{ flex: 1, backgroundColor: theme.palette.background }, this.props.style]} onLayout={this._onLayout}>
+      <View style={styles.container} onLayout={this._onLayout}>
         {this.state._ready && <Loader>{this.props.children}</Loader>}
       </View>
     )
@@ -99,3 +103,12 @@ export default class ThemeProvider extends PureComponent {
     this.setState(newState)
   }
 }
+
+const Styles = StyleSheet.create((theme, { style }) => {
+  const container = {
+    backgroundColor: theme.palette.background,
+    flex: 1,
+    ...style
+  }
+  return { container }
+})

@@ -30,7 +30,7 @@ export default class BottomNavigation extends PureComponent {
     const { theme } = this.context
     const styles = Styles.get(theme, this.props)
     return (
-      <View style={[styles.container, this.props.style]}>
+      <View style={styles.container}>
         {this.props.children && this.props.children.map(this._renderItem)}
       </View>
     )
@@ -67,10 +67,11 @@ export default class BottomNavigation extends PureComponent {
   }
 }
 
-const Styles = StyleSheet.create((theme, { backgroundColor }) => {
+const Styles = StyleSheet.create((theme, { backgroundColor, style }) => {
   const container = {
     backgroundColor,
-    flexDirection: 'row'
+    flexDirection: 'row',
+    ...style
   }
   const item = {
     flex: 1,

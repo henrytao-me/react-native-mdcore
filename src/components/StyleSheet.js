@@ -12,13 +12,13 @@ export default class StyleSheet {
 
   constructor(creator) {
     this._creator = creator
-    this._theme = null
-    this._themeId = null
-    this._args = []
-    this._style = null
+    this._theme = undefined
+    this._themeId = undefined
+    this._args = undefined
+    this._style = undefined
   }
 
-  get(theme, ...args) {
+  get(theme = null, ...args) {
     if (this._shouldRenewCache(theme, args)) {
       this._theme = theme
       this._themeId = this.constructor._getThemeId(theme)
@@ -28,10 +28,7 @@ export default class StyleSheet {
     return this._style
   }
 
-  _shouldRenewCache(theme = null, ...args) {
-    if (theme !== this._theme || this.constructor._getThemeId(theme) !== this._themeId || !Utils.deepEqual(args, this._args)) {
-      return true
-    }
-    return false
+  _shouldRenewCache(theme = null, args) {
+    return theme !== this._theme || this.constructor._getThemeId(theme) !== this._themeId || !Utils.deepEqual(args, this._args)
   }
 }

@@ -125,16 +125,16 @@ export const isArray = (items) => {
   return Array.isArray(items)
 }
 
-export const isFunction = (obj) => {
-  return obj instanceof Function
+export const isFunction = (obj = null) => {
+  return obj !== null && obj instanceof Function
 }
 
-export const isObject = (item) => {
-  return (item && typeof item === 'object' && !isArray(item))
+export const isObject = (item = null) => {
+  return item !== null && typeof item === 'object' && !isArray(item)
 }
 
-export const isString = (item) => {
-  return (item && typeof item === 'string')
+export const isString = (item = null) => {
+  return item !== null && typeof item === 'string'
 }
 
 export const merge = (...args) => {

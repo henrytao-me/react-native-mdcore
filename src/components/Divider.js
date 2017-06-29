@@ -19,17 +19,17 @@ export default class Divider extends PureComponent {
     const { theme } = this.context
     const styles = Styles.get(theme, this.props)
     return (
-      <View style={[styles.container, this.props.style]} />
+      <View style={styles.container} />
     )
   }
 }
 
-const Styles = StyleSheet.create((theme, opts = {}) => {
-  let { largePadding } = opts
+const Styles = StyleSheet.create((theme, { largePadding, style }) => {
   const container = {
     backgroundColor: theme.divider.color,
     height: theme.divider.size,
-    marginLeft: largePadding ? (2 * theme.list.paddingLeft + theme.list.avatarSize) : 0
+    marginLeft: largePadding ? (2 * theme.list.paddingLeft + theme.list.avatarSize) : 0,
+    ...style
   }
   return { container }
-})
+}, ['largePadding', 'style'])

@@ -8,6 +8,7 @@ import {
 import NativeModules from './NativeModules'
 import PropTypes from './PropTypes'
 import PureComponent from './PureComponent'
+import StyleSheet from './StyleSheet'
 
 export default class StatusBar extends PureComponent {
 
@@ -29,23 +30,23 @@ export default class StatusBar extends PureComponent {
   }
 
   render() {
-    const backgroundColor = this._getBackgroundColor()
-    const barStyle = this._getBarStyle()
+    const { theme } = this.context
     const height = this.state.statusBarHeight
+    const styles = Styles.get(theme, this.props, { height })
     return (
-      <View style={[{ backgroundColor, height }, this.props.style]}>
-        <RNStatusBar barStyle={barStyle} />
+      <View style={styles.container}>
+        <RNStatusBar barStyle={styles.barStyle} />
       </View>
     )
   }
-
-  _getBackgroundColor = () => {
-    const { theme } = this.context
-    const backgroundColor = this.props.backgroundColor || (Platform.OS === 'ios' ? 'transparent' : theme.palette.backgroundDark)
-    return theme.palette[backgroundColor] || backgroundColor
-  }
-
-  _getBarStyle = () => {
-    return this.props.barStyle || (Platform.OS === 'ios' ? 'dark-content' : 'light-content')
-  }
 }
+
+const Styles = StyleSheet.create((theme, { backgroundColor, barStyle, style }, { height }) => {
+  const bar = barStyle || (Platform.OS === 'ios' ? 'dark-content' : 'light-content')
+  const container = {
+    backgroundColor,
+    height,
+    ...style
+  }
+  return { bar, container }
+}, ['backgroundColor', 'barStyle', 'style'])

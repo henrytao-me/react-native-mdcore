@@ -129,4 +129,4 @@ const Styles = StyleSheet.create((theme, { style }) => {
     ...style
   }
   return { container }
-})
+}, ['style'])

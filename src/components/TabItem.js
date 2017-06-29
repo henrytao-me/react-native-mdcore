@@ -1,5 +1,5 @@
 import React from 'react'
-import { View } from 'react-native'
+import { TouchableWithoutFeedback, View } from 'react-native'
 
 import Icon from './Icon'
 import PropTypes from './PropTypes'
@@ -22,12 +22,14 @@ export default class TabItem extends PureComponent {
     iconSet: PropTypes.string,
     palette: PropTypes.palette,
     title: PropTypes.text,
-    titleStyle: PropTypes.style
+    titleStyle: PropTypes.style,
+    onPress: PropTypes.func
   }
 
   static defaultProps = {
     active: false,
-    palette: 'primary'
+    palette: 'primary',
+    onPress: () => { }
   }
 
   render() {
@@ -35,23 +37,25 @@ export default class TabItem extends PureComponent {
     const color = this._getColor()
     const styles = Styles.get(theme, this.props)
     return (
-      <View style={[styles.container, this.props.style]}>
-        {this.props.iconName && <Icon
-          active={this.props.active}
-          color={color}
-          focus={this.props.active}
-          name={this.props.iconName}
-          palette={this.props.palette}
-          set={this.props.iconSet} />}
-        {this.props.title && <Text style={[styles.title, this.props.titleStyle]}
-          color={color}
-          enable={this.props.active}
-          palette={this.props.palette}
-          subType="primary"
-          type="body1">
-          {this._getTitle()}
-        </Text>}
-      </View>
+      <TouchableWithoutFeedback onPress={this._onPress}>
+        <View style={styles.container}>
+          {this.props.iconName && <Icon
+            active={this.props.active}
+            color={color}
+            focus={this.props.active}
+            name={this.props.iconName}
+            palette={this.props.palette}
+            set={this.props.iconSet} />}
+          {this.props.title && <Text style={styles.title}
+            color={color}
+            enable={this.props.active}
+            palette={this.props.palette}
+            subType="primary"
+            type="body1">
+            {this._getTitle()}
+          </Text>}
+        </View>
+      </TouchableWithoutFeedback>
     )
   }
 
@@ -65,17 +69,23 @@ export default class TabItem extends PureComponent {
   _getTitle = () => {
     return Utils.isString(this.props.title) ? this.props.title.toUpperCase() : this.props.title
   }
+
+  _onPress = () => {
+    this.props.onPress({ ...this.props })
+  }
 }
 
-const Styles = StyleSheet.create((theme, { iconName, title }) => {
+const Styles = StyleSheet.create((theme, { iconName, style, title, titleStyle }) => {
   const container = {
     alignItems: 'center',
     justifyContent: 'center',
     flex: 1,
-    height: iconName && title ? theme.tab.iconWithTextHeight : (iconName ? theme.tab.iconOnlyHeight : theme.tab.textOnlyHeight)
+    height: iconName && title ? theme.tab.iconWithTextHeight : (iconName ? theme.tab.iconOnlyHeight : theme.tab.textOnlyHeight),
+    ...style
   }
   const tabTitle = {
-    marginTop: iconName && title ? theme.tab.spacing : 0
+    marginTop: iconName && title ? theme.tab.spacing : 0,
+    ...titleStyle
   }
   return { container, title: tabTitle }
-})
+}, ['iconName', 'style', 'title', 'titleStyle'])

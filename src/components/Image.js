@@ -3,6 +3,7 @@ import { Image as RNImage, View } from 'react-native'
 
 import PropTypes from './PropTypes'
 import PureComponent from './PureComponent'
+import StyleSheet from './StyleSheet'
 
 import * as Utils from '../libs/utils'
 
@@ -42,9 +43,14 @@ export default class Image extends PureComponent {
   render() {
     const image = this._getImage()
     const radius = this._getRadius()
+    const styles = Styles.get(undefined, this.props, {
+      height: this._getHeight(),
+      radius,
+      width: this._getWidth()
+    })
     return (
-      <View style={[{ width: this.props.width, height: this.props.height }, this.props.style]} onLayout={this._onLayout}>
-        <RNImage style={{ width: this._getWidth(), height: this._getHeight(), borderRadius: radius }}
+      <View style={styles.container} onLayout={this._onLayout}>
+        <RNImage style={styles.image}
           resizeMode={this.props.resizeMode}
           source={image} />
       </View>
@@ -113,3 +119,17 @@ export default class Image extends PureComponent {
     })
   }
 }
+
+const Styles = StyleSheet.create((theme, { height, style, width }, { height: imageHeight, radius: imageRadius, width: imageWidth }) => {
+  const container = {
+    height,
+    width,
+    ...style
+  }
+  const image = {
+    borderRadius: imageRadius,
+    height: imageHeight,
+    width: imageWidth
+  }
+  return { container, image }
+}, ['height', 'style', 'width'])

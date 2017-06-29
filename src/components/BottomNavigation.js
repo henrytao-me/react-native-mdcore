@@ -56,16 +56,13 @@ export default class BottomNavigation extends PureComponent {
     const { theme } = this.context
     const styles = Styles.get(theme, this.props)
     const active = index === this._getIndex()
-    item = React.cloneElement(item, {
+    return React.cloneElement(item, {
       active,
+      key: index,
+      style: styles.item,
       tag: index,
       onPress: this._onItemPress
     })
-    return (
-      <View key={index} style={styles.item}>
-        {item}
-      </View>
-    )
   }
 }
 
@@ -82,4 +79,4 @@ const Styles = StyleSheet.create((theme, { backgroundColor, style }) => {
     justifyContent: 'center'
   }
   return { container, item }
-})
+}, ['backgroundColor', 'style'])

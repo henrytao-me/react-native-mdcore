@@ -56,19 +56,20 @@ export default class Tabs extends PureComponent {
     const { theme } = this.context
     const styles = Styles.get(theme, this.props)
     const active = index === this._getIndex()
-    item = item.props.active === active ? item : React.cloneElement(item, { active })
+    item = React.cloneElement(item, {
+      active,
+      style: styles.item
+    })
     return (
-      <TouchableWithoutFeedback key={index} onPress={() => this._onItemPress(index)}>
-        <View style={styles.item}>
-          {this.props.indicatorEnabled && active && <View style={[styles.indicator, this.props.indicatorStyle]} />}
-          {item}
-        </View>
-      </TouchableWithoutFeedback>
+      <View key={index} style={styles.item}>
+        {this.props.indicatorEnabled && active && <View style={styles.indicator} />}
+        {item}
+      </View>
     )
   }
 }
 
-const Styles = StyleSheet.create((theme, { backgroundColor }) => {
+const Styles = StyleSheet.create((theme, { backgroundColor, indicatorStyle }) => {
   const container = {
     backgroundColor: backgroundColor || theme.palette.primary,
     flexDirection: 'row'
@@ -79,7 +80,8 @@ const Styles = StyleSheet.create((theme, { backgroundColor }) => {
     right: 0,
     bottom: 0,
     backgroundColor: theme.palette.accent,
-    height: theme.tab.indicatorHeight
+    height: theme.tab.indicatorHeight,
+    ...indicatorStyle
   }
   const item = {
     flex: 1,
@@ -88,4 +90,4 @@ const Styles = StyleSheet.create((theme, { backgroundColor }) => {
     justifyContent: 'center'
   }
   return { container, indicator, item }
-})
+}, ['backgroundColor', 'indicatorStyle'])

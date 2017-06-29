@@ -1,23 +1,34 @@
-import { Component } from 'react'
+import {
+  PureComponent,
+  PropTypes
+} from '../components'
 
 let READY = true
 
 const LISTENERS = []
-const addListener = (listener) => {
+const addListener = listener => {
   if (READY) {
     listener()
   } else {
     LISTENERS.push(listener)
   }
 }
-const removeListener = (listener) => {
+const removeListener = listener => {
   const index = LISTENERS.indexOf(listener)
   if (index >= 0) {
     LISTENERS.slice(index, 1)
   }
 }
 
-export default class Loader extends Component {
+export default class Loader extends PureComponent {
+
+  static propTypes = {
+    onUpdate: PropTypes.func
+  }
+
+  static defaultProps = {
+    onUpdate: () => { }
+  }
 
   static defer = () => {
     READY = false
@@ -40,6 +51,11 @@ export default class Loader extends Component {
 
   componentDidMount() {
     addListener(this._onReady)
+    this._onUpdate()
+  }
+
+  componentDidUpdate() {
+    this._onUpdate()
   }
 
   componentWillUnmount() {
@@ -59,5 +75,11 @@ export default class Loader extends Component {
     this.setState({
       ready: true
     })
+  }
+
+  _onUpdate = () => {
+    if (this.state.ready) {
+      this.props.onUpdate()
+    }
   }
 }

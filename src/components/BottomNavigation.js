@@ -1,5 +1,5 @@
 import React from 'react'
-import { TouchableWithoutFeedback, View } from 'react-native'
+import { View } from 'react-native'
 
 import PropTypes from './PropTypes'
 import PureComponent from './PureComponent'

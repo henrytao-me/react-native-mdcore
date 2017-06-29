@@ -1,71 +1,55 @@
-import React, { PureComponent } from 'react'
-import { AppState, I18nManager, View } from 'react-native'
+import React from 'react'
 
 import {
+  AppState,
+  Dimensions,
+  I18nManager,
   PropTypes,
-  StyleSheet
+  PureComponent,
+  StyleSheet,
+  View
 } from '../components'
+import Loader from './loader'
 import Theme from '../theme'
 import * as Utils from '../libs/utils'
-
-import Loader from './loader'
 
 const LAND = 'land'
 const LDLTR = 'ldltr'
 const LDRTL = 'ldrtl'
 const PORT = 'port'
 
-export default class ThemeProvider extends PureComponent {
+class ThemeProvider extends PureComponent {
 
   static childContextTypes = {
     theme: PropTypes.any
   }
 
   static propTypes = {
-    layoutDirection: PropTypes.string,
-    orientation: PropTypes.string,
     theme: PropTypes.instanceOf(Theme.constructor),
-    smallestWidth: PropTypes.string,
     onConfigChange: PropTypes.func
   }
 
   static defaultProps = {
-    layoutDirection: '',
-    orientation: '',
     theme: Theme,
-    smallestWidth: '',
-    onConfigChange: (_config = {}) => { }
-  }
-
-  static defer = () => {
-    Loader.defer()
-  }
-
-  static ready = () => {
-    Loader.ready()
+    onConfigChange: () => { }
   }
 
   state = {
+    height: undefined,
     layoutDirection: undefined,
     orientation: undefined,
-    smallestWidth: undefined
+    ready: false,
+    smallestWidth: undefined,
+    width: undefined
   }
 
   _theme = {}
 
   componentDidMount() {
-    this._mounted = true
     AppState.addEventListener('change', this._onAppStateChange)
   }
 
-  componentDidUpdate() {
-    if (Loader.isReady()) {
-      this.props.onConfigChange(this._getConfigProps())
-    }
-  }
-
   componentWillUnmount() {
-    this._mounted = false
     AppState.removeEventListener('change', this._onAppStateChange)
   }
 
@@ -74,41 +58,62 @@ export default class ThemeProvider extends PureComponent {
   }
 
   render() {
+    const configProps = this._getConfigProps()
     const theme = this._theme
     theme.__id = (theme.__id || new Date().getTime()) + 1
-    Object.assign(theme, this.props.theme.resolve(Object.values(this._getConfigProps())))
+    Object.assign(
+      theme,
+      this.props.theme.resolve(Object.values(configProps))
+    )
     const styles = Styles.get(theme, this.props)
+    const loader = React.createElement(Loader, {
+      ...configProps,
+      onUpdate: this._onConfigChange
+    }, this.props.children)
     return (
       <View style={styles.container} onLayout={this._onLayout}>
-        {this.state._ready && <Loader>{this.props.children}</Loader>}
+        {this.state.ready && loader}
       </View>
     )
   }
 
   _getConfigProps = () => {
-    return Object.keys(this.props)
-      .filter(prop => Utils.isString(this.props[prop]))
-      .reduce((acc, prop) => {
-        acc[prop] = this.props[prop] || this.state[prop]
-        return acc
-      }, {})
-  }
-
-  _onAppStateChange = () => {
-    if (I18nManager.isRTL && this.state.layoutDirection !== LDRTL) {
-      this.setState({ layoutDirection: LDRTL })
-    } else if (!I18nManager.isRTL && this.state.layoutDirection !== LDLTR) {
-      this.setState({ layoutDirection: LDLTR })
+    const { layoutDirection, orientation, smallestWidth } = this.state
+    return {
+      ...Object.keys(this.props)
+        .filter(prop => Utils.isString(this.props[prop]))
+        .reduce((acc, prop) => {
+          acc[prop] = this.props[prop]
+          return acc
+        }, {}),
+      layoutDirection, orientation, smallestWidth
     }
   }
 
-  _onLayout = ({ nativeEvent: { layout: { width, height } } }) => {
+  _onAppStateChange = () => {
+    if (I18nManager.isRTL) {
+      this._updateState({ layoutDirection: LDRTL })
+    } else {
+      this._updateState({ layoutDirection: LDLTR })
+    }
+  }
+
+  _onConfigChange = () => {
+    this.props.onConfigChange(this._getConfigProps())
+  }
+
+  _onLayout = () => {
+    const { height, width } = Dimensions.get('window')
     const keys = this.props.theme.getOrderedKeys()
-    const newState = Object.assign({ _ready: true }, this.state, {
-      smallestWidth: undefined
+    const newState = Object.assign({}, this.state, {
+      height,
+      smallestWidth: undefined,
+      width
     })
     keys.forEach(key => {
-      const smallestWidth = Utils.idx(key, key => parseInt(/^sw([0-9]+)$/.exec(key)[1]))
+      const smallestWidth = Utils.idx(key, key =>
+        parseInt(/^sw([0-9]+)$/.exec(key)[1])
+      )
       if (smallestWidth && width >= smallestWidth) {
         newState.smallestWidth = key
       }
@@ -118,9 +123,23 @@ export default class ThemeProvider extends PureComponent {
     } else if (width <= height && this.state.orientation !== PORT) {
       newState.orientation = PORT
     }
+    this._updateState(newState)
+  }
+
+  _updateState = (state) => {
+    const newState = { ...this.state, ...state }
+    if (newState.layoutDirection && newState.width) {
+      newState.ready = true
+    }
     this.setState(newState)
   }
 }
+
+ThemeProvider.defer = Loader.defer
+
+ThemeProvider.ready = Loader.ready
+
+export default ThemeProvider
 
 const Styles = StyleSheet.create((theme, { style }) => {
   const container = {

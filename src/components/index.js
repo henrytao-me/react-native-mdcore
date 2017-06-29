@@ -3,9 +3,10 @@ export { Component }
 
 import {
   AppRegistry, AppState, Animated,
+  Dimensions,
   Easing,
   FlatList,
-  InteractionManager,
+  I18nManager, InteractionManager,
   ListView,
   PixelRatio,
   Platform,
@@ -16,9 +17,10 @@ import {
 } from 'react-native'
 export {
   AppRegistry, AppState, Animated,
+  Dimensions,
   Easing,
   FlatList,
-  InteractionManager,
+  I18nManager, InteractionManager,
   ListView,
   PixelRatio,
   Platform,

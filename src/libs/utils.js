@@ -1,11 +1,8 @@
 import { isImmutable } from './immutable'
 
 export const deepEqual = (a, b, comparator = _comparator) => {
-  if (isImmutable(a) && isImmutable(b)) {
-    return a === b
-  }
-  if (a instanceof Date && b instanceof Date) {
-    return _comparator(a, b)
+  if (comparator(a, b)) {
+    return true
   }
   if (isArray(a) && isArray(b)) {
     if (a.length !== b.length) {
@@ -144,11 +141,8 @@ export const merge = (...args) => {
 }
 
 export const shallowEqual = (a, b, comparator = _comparator, excludes = []) => {
-  if (isImmutable(a) && isImmutable(b)) {
-    return a === b
-  }
-  if (a instanceof Date && b instanceof Date) {
-    return comparator(a, b)
+  if (comparator(a, b)) {
+    return true
   }
   if (isArray(a) && isArray(b)) {
     if (a.length !== b.length) {
@@ -179,6 +173,9 @@ export const shallowEqual = (a, b, comparator = _comparator, excludes = []) => {
 }
 
 const _comparator = (a, b) => {
+  if (isImmutable(a) && isImmutable(b)) {
+    return a === b
+  }
   if (a instanceof Date && b instanceof Date) {
     return a.getTime() === b.getTime()
   }

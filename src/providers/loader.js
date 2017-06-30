@@ -1,6 +1,6 @@
 import {
-  PureComponent,
-  PropTypes
+  PropTypes,
+  PureComponent
 } from '../components'
 
 let READY = true

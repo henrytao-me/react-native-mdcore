@@ -61,18 +61,11 @@ class ThemeProvider extends PureComponent {
     const configProps = this._getConfigProps()
     const theme = this._theme
     theme.__id = (theme.__id || new Date().getTime()) + 1
-    Object.assign(
-      theme,
-      this.props.theme.resolve(Object.values(configProps))
-    )
+    Object.assign(theme, this.props.theme.resolve(Object.values(configProps)))
     const styles = Styles.get(theme, this.props)
-    const loader = React.createElement(Loader, {
-      ...configProps,
-      onUpdate: this._onConfigChange
-    }, this.props.children)
     return (
       <View style={styles.container} onLayout={this._onLayout}>
-        {this.state.ready && loader}
+        {this.state.ready && <Loader {...configProps} onUpdate={this._onConfigChange}>{this.props.children}</Loader>}
       </View>
     )
   }
@@ -91,11 +84,7 @@ class ThemeProvider extends PureComponent {
   }
 
   _onAppStateChange = () => {
-    if (I18nManager.isRTL) {
-      this._updateState({ layoutDirection: LDRTL })
-    } else {
-      this._updateState({ layoutDirection: LDLTR })
-    }
+    this._updateState({ layoutDirection: I18nManager.isRTL ? LDRTL : LDLTR })
   }
 
   _onConfigChange = () => {
@@ -103,13 +92,15 @@ class ThemeProvider extends PureComponent {
   }
 
   _onLayout = () => {
+    this._onAppStateChange()
     const { height, width } = Dimensions.get('window')
     const keys = this.props.theme.getOrderedKeys()
-    const newState = Object.assign({}, this.state, {
+    const newState = {
       height,
+      layoutDirection: I18nManager.isRTL ? LDRTL : LDLTR,
       smallestWidth: undefined,
       width
-    })
+    }
     keys.forEach(key => {
       const smallestWidth = Utils.idx(key, key =>
         parseInt(/^sw([0-9]+)$/.exec(key)[1])
@@ -118,9 +109,9 @@ class ThemeProvider extends PureComponent {
         newState.smallestWidth = key
       }
     })
-    if (width > height && this.state.orientation !== LAND) {
+    if (width > height) {
       newState.orientation = LAND
-    } else if (width <= height && this.state.orientation !== PORT) {
+    } else if (width <= height) {
       newState.orientation = PORT
     }
     this._updateState(newState)
@@ -136,6 +127,8 @@ class ThemeProvider extends PureComponent {
 }
 
 ThemeProvider.defer = Loader.defer
+
+ThemeProvider.isReady = Loader.isReady
 
 ThemeProvider.ready = Loader.ready
 

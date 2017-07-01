@@ -23,20 +23,18 @@ const removeListener = listener => {
 export default class Loader extends PureComponent {
 
   static propTypes = {
+    onRender: PropTypes.func,
     onUpdate: PropTypes.func
   }
 
   static defaultProps = {
+    onRender: () => { },
     onUpdate: () => { }
   }
 
   static defer = () => {
     READY = false
     LISTENERS.splice(0, LISTENERS.length)
-  }
-
-  static isReady = () => {
-    return READY
   }
 
   static ready = () => {
@@ -67,6 +65,7 @@ export default class Loader extends PureComponent {
     if (!ready) {
       return null
     } else {
+      this._onRender()
       return this.props.children
     }
   }
@@ -75,6 +74,10 @@ export default class Loader extends PureComponent {
     this.setState({
       ready: true
     })
+  }
+
+  _onRender = () => {
+    this.props.onRender()
   }
 
   _onUpdate = () => {

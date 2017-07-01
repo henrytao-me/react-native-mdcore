@@ -179,9 +179,6 @@ const _comparator = (a, b) => {
   if (a instanceof Date && b instanceof Date) {
     return a.getTime() === b.getTime()
   }
-  if (a instanceof Function && b instanceof Function) {
-    return true
-  }
   return a === b
 }
 

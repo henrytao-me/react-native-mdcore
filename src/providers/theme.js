@@ -2,7 +2,6 @@ import React from 'react'
 
 import {
   AppState,
-  Dimensions,
   I18nManager,
   PropTypes,
   PureComponent,
@@ -59,13 +58,14 @@ class ThemeProvider extends PureComponent {
 
   render() {
     const configProps = this._getConfigProps()
-    const theme = this._theme
-    theme.__id = (theme.__id || new Date().getTime()) + 1
-    Object.assign(theme, this.props.theme.resolve(Object.values(configProps)))
-    const styles = Styles.get(theme, this.props)
+    const styles = Styles.get(undefined, this.props)
     return (
       <View style={styles.container} onLayout={this._onLayout}>
-        {this.state.ready && <Loader {...configProps} onUpdate={this._onConfigChange}>{this.props.children}</Loader>}
+        {this.state.ready && <Loader {...configProps}
+          onRender={this._onLoaderRender}
+          onUpdate={this._onLoaderUpdate}>
+          {this.props.children}
+        </Loader>}
       </View>
     )
   }
@@ -87,18 +87,12 @@ class ThemeProvider extends PureComponent {
     this._updateState({ layoutDirection: I18nManager.isRTL ? LDRTL : LDLTR })
   }
 
-  _onConfigChange = () => {
-    this.props.onConfigChange(this._getConfigProps())
-  }
-
-  _onLayout = () => {
-    this._onAppStateChange()
-    const { height, width } = Dimensions.get('window')
+  _onLayout = ({ nativeEvent: { layout: { width, height } } }) => {
     const keys = this.props.theme.getOrderedKeys()
     const newState = {
       height,
       layoutDirection: I18nManager.isRTL ? LDRTL : LDLTR,
-      smallestWidth: undefined,
+      smallestWidth: null,
       width
     }
     keys.forEach(key => {
@@ -117,6 +111,17 @@ class ThemeProvider extends PureComponent {
     this._updateState(newState)
   }
 
+  _onLoaderRender = () => {
+    const configProps = this._getConfigProps()
+    const theme = this._theme
+    theme.__id = (theme.__id || new Date().getTime()) + 1
+    Object.assign(theme, this.props.theme.resolve(Object.values(configProps)))
+  }
+
+  _onLoaderUpdate = () => {
+    this.props.onConfigChange(this._getConfigProps())
+  }
+
   _updateState = (state) => {
     const newState = { ...this.state, ...state }
     if (newState.layoutDirection && newState.width) {
@@ -128,15 +133,12 @@ class ThemeProvider extends PureComponent {
 
 ThemeProvider.defer = Loader.defer
 
-ThemeProvider.isReady = Loader.isReady
-
 ThemeProvider.ready = Loader.ready
 
 export default ThemeProvider
 
 const Styles = StyleSheet.create((theme, { style }) => {
   const container = {
-    backgroundColor: theme.palette.background,
     flex: 1,
     ...style
   }

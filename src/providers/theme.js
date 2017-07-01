@@ -92,7 +92,7 @@ class ThemeProvider extends PureComponent {
     const newState = {
       height,
       layoutDirection: I18nManager.isRTL ? LDRTL : LDLTR,
-      smallestWidth: null,
+      smallestWidth: 'sw0',
       width
     }
     keys.forEach(key => {

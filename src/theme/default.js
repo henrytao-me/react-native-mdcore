@@ -17,7 +17,7 @@ export default {
     shadowRadius: 10,
     shadowOffset: {
       height: 1,
-      width: 0.3,
+      width: 0.3
     }
   },
   dialog: {

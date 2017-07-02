@@ -19,10 +19,20 @@ import PureComponent from './PureComponent'
 import * as Utils from '../libs/utils'
 
 export default class Icon extends PureComponent {
-
   static DEFAULT_ICON_SET = 'MaterialIcons'
 
-  static ICON_SETS = { Entypo, EvilIcons, FontAwesome, Foundation, Ionicons, MaterialIcons, MaterialCommunityIcons, Octicons, Zocial, SimpleLineIcons }
+  static ICON_SETS = {
+    Entypo,
+    EvilIcons,
+    FontAwesome,
+    Foundation,
+    Ionicons,
+    MaterialIcons,
+    MaterialCommunityIcons,
+    Octicons,
+    Zocial,
+    SimpleLineIcons
+  }
 
   static contextTypes = {
     theme: PropTypes.any
@@ -48,7 +58,7 @@ export default class Icon extends PureComponent {
     Icon.ICON_SETS[iconSet] = createIconSet(glyphMap, fontFamily, fontFile)
   }
 
-  static setDefaultIconSet = (iconSet) => {
+  static setDefaultIconSet = iconSet => {
     Icon.DEFAULT_ICON_SET = iconSet
   }
 
@@ -58,10 +68,12 @@ export default class Icon extends PureComponent {
     const size = this.props.size || theme.icon.size
     const IconView = Icon.ICON_SETS[this.props.set || Icon.DEFAULT_ICON_SET]
     return (
-      <IconView style={this.props.style}
+      <IconView
+        style={this.props.style}
         color={color}
         name={this.props.name}
-        size={size} />
+        size={size}
+      />
     )
   }
 
@@ -70,7 +82,9 @@ export default class Icon extends PureComponent {
       return this.props.color(this.props)
     }
     const { theme } = this.context
-    const state = this.props.focus ? 'focused' : (this.props.active ? 'active' : 'inactive')
+    const state = this.props.focus
+      ? 'focused'
+      : this.props.active ? 'active' : 'inactive'
     return this.props.color || theme.iconColor[state][this.props.palette]
   }
 }

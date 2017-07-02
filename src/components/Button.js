@@ -6,7 +6,6 @@ import PureComponent from './PureComponent'
 import RNButton from './internal/Button'
 
 export default class Button extends PureComponent {
-
   static contextTypes = {
     theme: PropTypes.any
   }
@@ -55,7 +54,10 @@ export default class Button extends PureComponent {
         <RNButton
           buttonStyle={{
             elevation: type === 'borderless' ? 0 : 2,
-            backgroundColor: type === 'borderless' ? theme.palette.transparent : backgroundColor
+            backgroundColor:
+              type === 'borderless'
+                ? theme.palette.transparent
+                : backgroundColor
           }}
           textStyle={{
             color: type === 'borderless' ? textColorBorderless : textColor,
@@ -63,7 +65,8 @@ export default class Button extends PureComponent {
             fontWeight: 'normal'
           }}
           title={this.props.title}
-          onPress={this.props.onPress} />
+          onPress={this.props.onPress}
+        />
       </View>
     )
   }

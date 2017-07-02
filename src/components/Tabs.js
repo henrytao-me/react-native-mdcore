@@ -1,12 +1,11 @@
 import React from 'react'
-import { TouchableWithoutFeedback, View } from 'react-native'
+import { View } from 'react-native'
 
 import PropTypes from './PropTypes'
 import PureComponent from './PureComponent'
 import StyleSheet from './StyleSheet'
 
 export default class Tabs extends PureComponent {
-
   static contextTypes = {
     theme: PropTypes.any
   }
@@ -22,7 +21,7 @@ export default class Tabs extends PureComponent {
   static defaultProps = {
     indicatorEnabled: true,
     initialItem: 0,
-    onItemSelected: (_options = { index: 0 }) => { }
+    onItemSelected: (_options = { index: 0 }) => {}
   }
 
   state = {
@@ -39,15 +38,17 @@ export default class Tabs extends PureComponent {
     )
   }
 
-  setItem = (index) => {
+  setItem = index => {
     this.setState({ index })
   }
 
   _getIndex = () => {
-    return this.state.index !== undefined ? this.state.index : this.props.initialItem
+    return this.state.index !== undefined
+      ? this.state.index
+      : this.props.initialItem
   }
 
-  _onItemPress = (index) => {
+  _onItemPress = index => {
     this.setState({ index })
     this.props.onItemSelected({ index })
   }
@@ -62,32 +63,37 @@ export default class Tabs extends PureComponent {
     })
     return (
       <View key={index} style={styles.item}>
-        {this.props.indicatorEnabled && active && <View style={styles.indicator} />}
+        {this.props.indicatorEnabled &&
+          active &&
+          <View style={styles.indicator} />}
         {item}
       </View>
     )
   }
 }
 
-const Styles = StyleSheet.create((theme, { backgroundColor, indicatorStyle }) => {
-  const container = {
-    backgroundColor: backgroundColor || theme.palette.primary,
-    flexDirection: 'row'
-  }
-  const indicator = {
-    position: 'absolute',
-    left: 0,
-    right: 0,
-    bottom: 0,
-    backgroundColor: theme.palette.accent,
-    height: theme.tab.indicatorHeight,
-    ...indicatorStyle
-  }
-  const item = {
-    flex: 1,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center'
-  }
-  return { container, indicator, item }
-}, ['backgroundColor', 'indicatorStyle'])
+const Styles = StyleSheet.create(
+  (theme, { backgroundColor, indicatorStyle }) => {
+    const container = {
+      backgroundColor: backgroundColor || theme.palette.primary,
+      flexDirection: 'row'
+    }
+    const indicator = {
+      position: 'absolute',
+      left: 0,
+      right: 0,
+      bottom: 0,
+      backgroundColor: theme.palette.accent,
+      height: theme.tab.indicatorHeight,
+      ...indicatorStyle
+    }
+    const item = {
+      flex: 1,
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'center'
+    }
+    return { container, indicator, item }
+  },
+  ['backgroundColor', 'indicatorStyle']
+)

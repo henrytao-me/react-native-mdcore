@@ -18,7 +18,6 @@ const LDRTL = 'ldrtl'
 const PORT = 'port'
 
 class ThemeProvider extends PureComponent {
-
   static childContextTypes = {
     theme: PropTypes.any
   }
@@ -30,7 +29,7 @@ class ThemeProvider extends PureComponent {
 
   static defaultProps = {
     theme: Theme,
-    onConfigChange: () => { }
+    onConfigChange: () => {}
   }
 
   state = {
@@ -61,11 +60,13 @@ class ThemeProvider extends PureComponent {
     const styles = Styles.get(undefined, this.props)
     return (
       <View style={styles.container} onLayout={this._onLayout}>
-        {this.state.ready && <Loader {...configProps}
-          onRender={this._onLoaderRender}
-          onUpdate={this._onLoaderUpdate}>
-          {this.props.children}
-        </Loader>}
+        {this.state.ready &&
+          <Loader
+            {...configProps}
+            onRender={this._onLoaderRender}
+            onUpdate={this._onLoaderUpdate}>
+            {this.props.children}
+          </Loader>}
       </View>
     )
   }
@@ -79,7 +80,9 @@ class ThemeProvider extends PureComponent {
           acc[prop] = this.props[prop]
           return acc
         }, {}),
-      layoutDirection, orientation, smallestWidth
+      layoutDirection,
+      orientation,
+      smallestWidth
     }
   }
 
@@ -122,7 +125,7 @@ class ThemeProvider extends PureComponent {
     this.props.onConfigChange(this._getConfigProps())
   }
 
-  _updateState = (state) => {
+  _updateState = state => {
     const newState = { ...this.state, ...state }
     if (newState.layoutDirection && newState.width) {
       newState.ready = true
@@ -137,10 +140,13 @@ ThemeProvider.ready = Loader.ready
 
 export default ThemeProvider
 
-const Styles = StyleSheet.create((theme, { style }) => {
-  const container = {
-    flex: 1,
-    ...style
-  }
-  return { container }
-}, ['style'])
+const Styles = StyleSheet.create(
+  (theme, { style }) => {
+    const container = {
+      flex: 1,
+      ...style
+    }
+    return { container }
+  },
+  ['style']
+)

@@ -10,7 +10,6 @@ import {
 import PropTypes from 'prop-types'
 
 export default class Button extends Component {
-
   static propTypes = {
     /**
      * Text to display inside the button
@@ -42,17 +41,12 @@ export default class Button extends Component {
   }
 
   render() {
-    const {
-      accessibilityLabel,
-      color,
-      onPress,
-      disabled,
-      testID,
-    } = this.props
+    const { accessibilityLabel, color, onPress, disabled, testID } = this.props
     const title = `${this.props.title}`
     const buttonStyles = [styles.button]
     const textStyles = [styles.text]
-    const Touchable = Platform.OS === 'android' ? TouchableNativeFeedback : TouchableOpacity
+    const Touchable =
+      Platform.OS === 'android' ? TouchableNativeFeedback : TouchableOpacity
     if (color && Platform.OS === 'ios') {
       textStyles.push({ color: color })
     } else if (color) {
@@ -62,7 +56,8 @@ export default class Button extends Component {
       buttonStyles.push(styles.buttonDisabled)
       textStyles.push(styles.textDisabled)
     }
-    const formattedTitle = Platform.OS === 'android' ? title.toUpperCase() : title
+    const formattedTitle =
+      Platform.OS === 'android' ? title.toUpperCase() : title
     const accessibilityTraits = ['button']
     if (disabled) {
       accessibilityTraits.push('disabled')
@@ -78,7 +73,9 @@ export default class Button extends Component {
         disabled={disabled}
         onPress={onPress}>
         <View style={buttonStyles}>
-          <Text style={textStyles} disabled={disabled}>{formattedTitle}</Text>
+          <Text style={textStyles} disabled={disabled}>
+            {formattedTitle}
+          </Text>
         </View>
       </Touchable>
     )
@@ -97,41 +94,41 @@ const styles = StyleSheet.create({
     ios: {
       elevation: 4,
       backgroundColor: defaultBlue,
-      borderRadius: 2,
+      borderRadius: 2
     },
     android: {
       elevation: 4,
       backgroundColor: defaultBlue,
-      borderRadius: 2,
-    },
+      borderRadius: 2
+    }
   }),
   text: Platform.select({
     ios: {
       color: defaultBlue,
       textAlign: 'center',
       padding: 8,
-      fontSize: 18,
+      fontSize: 18
     },
     android: {
       textAlign: 'center',
       color: 'white',
       padding: 8,
-      fontWeight: '500',
-    },
+      fontWeight: '500'
+    }
   }),
   buttonDisabled: Platform.select({
     ios: {},
     android: {
       elevation: 0,
-      backgroundColor: '#dfdfdf',
+      backgroundColor: '#dfdfdf'
     }
   }),
   textDisabled: Platform.select({
     ios: {
-      color: '#cdcdcd',
+      color: '#cdcdcd'
     },
     android: {
-      color: '#a1a1a1',
+      color: '#a1a1a1'
     }
-  }),
+  })
 })

@@ -8,7 +8,6 @@ import StyleSheet from './StyleSheet'
 import * as Utils from '../libs/utils'
 
 export default class Text extends PureComponent {
-
   static contextTypes = {
     theme: PropTypes.any
   }
@@ -38,7 +37,8 @@ export default class Text extends PureComponent {
     const ellipsizeMode = this.props.ellipsizeMode
     const numberOfLines = this._getNumberOfLines()
     return (
-      <RNText style={[defaultStyle, { color }, this.props.style]}
+      <RNText
+        style={[defaultStyle, { color }, this.props.style]}
         ellipsizeMode={ellipsizeMode}
         numberOfLines={numberOfLines}>
         {this.props.children || this.props.value}
@@ -52,7 +52,8 @@ export default class Text extends PureComponent {
     }
     const { theme } = this.context
     const subType = this.props.enable ? this.props.subType : 'hint'
-    const color = this.props.color || theme.textColor[subType][this.props.palette]
+    const color =
+      this.props.color || theme.textColor[subType][this.props.palette]
     return color
   }
 
@@ -82,7 +83,7 @@ export default class Text extends PureComponent {
   }
 }
 
-const Styles = StyleSheet.create((theme) => {
+const Styles = StyleSheet.create(theme => {
   return {
     button: {
       fontFamily: theme.fontFamily.medium,

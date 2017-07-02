@@ -5,9 +5,4 @@ import Theme from './theme'
 import ThemeProvider from './providers/theme'
 import * as Utils from './libs/utils'
 
-export {
-  Resolver,
-  Theme,
-  ThemeProvider,
-  Utils
-}
+export { Resolver, Theme, ThemeProvider, Utils }

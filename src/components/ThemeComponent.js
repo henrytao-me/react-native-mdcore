@@ -5,14 +5,19 @@ import PropTypes from './PropTypes'
 import * as Utils from '../libs/utils'
 
 export default class ThemeComponent extends Component {
-
   static contextTypes = {
     theme: PropTypes.any
   }
 
   _themeId = undefined
 
-  shouldComponentUpdate(nextProps, nextState, nextContext, deepPropKeys = [], ignorePropKeys = []) {
+  shouldComponentUpdate(
+    nextProps,
+    nextState,
+    nextContext,
+    deepPropKeys = [],
+    ignorePropKeys = []
+  ) {
     const currentProps = { ...this.props }
     const newProps = { ...nextProps }
     const currentState = { ...this.state }
@@ -30,7 +35,11 @@ export default class ThemeComponent extends Component {
     ignorePropKeys.forEach(key => {
       currentProps[key] = newProps[key] = undefined
     })
-    return currentThemeId !== newThemeId || !Utils.shallowEqual(currentProps, newProps) || !Utils.shallowEqual(currentState, newState)
+    return (
+      currentThemeId !== newThemeId ||
+      !Utils.shallowEqual(currentProps, newProps) ||
+      !Utils.shallowEqual(currentState, newState)
+    )
   }
 
   render() {

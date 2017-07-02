@@ -18,7 +18,10 @@ export const deepEqual = (a, b, comparator = _comparator) => {
   if (isObject(a) && isObject(b)) {
     const aKeys = Object.keys(a)
     const bKeys = Object.keys(b)
-    if (aKeys.length !== bKeys.length || aKeys.sort().join(',') !== bKeys.sort().join(',')) {
+    if (
+      aKeys.length !== bKeys.length ||
+      aKeys.sort().join(',') !== bKeys.sort().join(',')
+    ) {
       return false
     }
     const keys = aKeys
@@ -51,7 +54,12 @@ export const flattenObject = (obj, prefix) => {
   }, {})
 }
 
-export const hook = (target, action, onError = (_error, _index) => { }, callback = (_next, _resolve, _reject) => _next()) => {
+export const hook = (
+  target,
+  action,
+  onError = (_error, _index) => {},
+  callback = (_next, _resolve, _reject) => _next()
+) => {
   callback = isObject(callback) ? callback : { retry: callback }
   action = action.bind(target)
   onError = onError.bind(target)
@@ -90,35 +98,37 @@ export const hook = (target, action, onError = (_error, _index) => { }, callback
       onError(error, options.index++)
     }
   }).bind(target)
-  const reject = ((error) => {
+  const reject = (error => {
     const { finished, reject } = options
     if (!finished && !!reject) {
       options.finished = true
       reject(error)
     }
   }).bind(target)
-  const resolve = ((data) => {
+  const resolve = (data => {
     const { finished, resolve } = options
     if (!finished && !!resolve) {
       options.finished = true
       resolve(data)
     }
   }).bind(target)
-  Object.keys(callbacks).forEach(key => fn[key] = () => {
-    callbacks[key](next, resolve, reject)
-  })
+  Object.keys(callbacks).forEach(
+    key =>
+      (fn[key] = () => {
+        callbacks[key](next, resolve, reject)
+      })
+  )
   return fn
 }
 
-export const idx = (obj, callback = (_obj) => { }) => {
+export const idx = (obj, callback = _obj => {}) => {
   try {
     return callback(obj)
-  } catch (ignore) {
-  }
+  } catch (ignore) {}
   return undefined
 }
 
-export const isArray = (items) => {
+export const isArray = items => {
   return Array.isArray(items)
 }
 
@@ -136,7 +146,9 @@ export const isString = (item = null) => {
 
 export const merge = (...args) => {
   const target = args[0]
-  args.filter((value, key) => key > 0).forEach(value => _mergeAPair(target, value))
+  args
+    .filter((value, key) => key > 0)
+    .forEach(value => _mergeAPair(target, value))
   return target
 }
 
@@ -158,7 +170,10 @@ export const shallowEqual = (a, b, comparator = _comparator, excludes = []) => {
   if (isObject(a) && isObject(b)) {
     const aKeys = Object.keys(a)
     const bKeys = Object.keys(b)
-    if (aKeys.length !== bKeys.length || aKeys.sort().join(',') !== bKeys.sort().join(',')) {
+    if (
+      aKeys.length !== bKeys.length ||
+      aKeys.sort().join(',') !== bKeys.sort().join(',')
+    ) {
       return false
     }
     const keys = aKeys.filter(key => excludes.indexOf(key) < 0)

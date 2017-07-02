@@ -1,7 +1,4 @@
-import {
-  PropTypes,
-  PureComponent
-} from '../components'
+import { PropTypes, PureComponent } from '../components'
 
 let READY = true
 
@@ -21,15 +18,14 @@ const removeListener = listener => {
 }
 
 export default class Loader extends PureComponent {
-
   static propTypes = {
     onRender: PropTypes.func,
     onUpdate: PropTypes.func
   }
 
   static defaultProps = {
-    onRender: () => { },
-    onUpdate: () => { }
+    onRender: () => {},
+    onUpdate: () => {}
   }
 
   static defer = () => {

@@ -2,7 +2,7 @@ import { NativeModules, Platform } from 'react-native'
 const { StatusBarManager } = NativeModules
 
 StatusBarManager._getHeight = StatusBarManager.getHeight
-StatusBarManager.getHeight = (callback = (_data) => { }) => {
+StatusBarManager.getHeight = (callback = _data => {}) => {
   switch (Platform.OS) {
     case 'ios':
       StatusBarManager._getHeight(callback)

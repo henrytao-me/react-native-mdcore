@@ -6,7 +6,6 @@ import PureComponent from './PureComponent'
 import StyleSheet from './StyleSheet'
 
 export default class Card extends PureComponent {
-
   static contextTypes = {
     theme: PropTypes.any
   }
@@ -22,7 +21,7 @@ export default class Card extends PureComponent {
   }
 }
 
-const Styles = StyleSheet.create((theme) => {
+const Styles = StyleSheet.create(_theme => {
   const container = {
     borderRadius: 2,
     shadowColor: '#000000',
@@ -30,7 +29,7 @@ const Styles = StyleSheet.create((theme) => {
     shadowRadius: 10,
     shadowOffset: {
       height: 1,
-      width: 0.3,
+      width: 0.3
     }
   }
   return { container }

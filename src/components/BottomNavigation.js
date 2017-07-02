@@ -6,7 +6,6 @@ import PureComponent from './PureComponent'
 import StyleSheet from './StyleSheet'
 
 export default class BottomNavigation extends PureComponent {
-
   static contextTypes = {
     theme: PropTypes.any
   }
@@ -19,7 +18,7 @@ export default class BottomNavigation extends PureComponent {
 
   static defaultProps = {
     initialItem: 0,
-    onItemSelected: (_options = { index: 0 }) => { }
+    onItemSelected: (_options = { index: 0 }) => {}
   }
 
   state = {
@@ -36,7 +35,7 @@ export default class BottomNavigation extends PureComponent {
     )
   }
 
-  setItem = (index) => {
+  setItem = index => {
     if (index === this.state.index) {
       return
     }
@@ -44,10 +43,12 @@ export default class BottomNavigation extends PureComponent {
   }
 
   _getIndex = () => {
-    return this.state.index !== undefined ? this.state.index : this.props.initialItem
+    return this.state.index !== undefined
+      ? this.state.index
+      : this.props.initialItem
   }
 
-  _onItemPress = (index) => {
+  _onItemPress = index => {
     this.setState({ index })
     this.props.onItemSelected({ ...this.props, index })
   }
@@ -66,17 +67,20 @@ export default class BottomNavigation extends PureComponent {
   }
 }
 
-const Styles = StyleSheet.create((theme, { backgroundColor, style }) => {
-  const container = {
-    backgroundColor,
-    flexDirection: 'row',
-    ...style
-  }
-  const item = {
-    flex: 1,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center'
-  }
-  return { container, item }
-}, ['backgroundColor', 'style'])
+const Styles = StyleSheet.create(
+  (theme, { backgroundColor, style }) => {
+    const container = {
+      backgroundColor,
+      flexDirection: 'row',
+      ...style
+    }
+    const item = {
+      flex: 1,
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'center'
+    }
+    return { container, item }
+  },
+  ['backgroundColor', 'style']
+)

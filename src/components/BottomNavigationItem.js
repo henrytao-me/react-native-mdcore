@@ -10,7 +10,6 @@ import Text from './Text'
 import * as Utils from '../libs/utils'
 
 export default class BottomNavigationItem extends PureComponent {
-
   static contextTypes = {
     theme: PropTypes.any
   }
@@ -29,7 +28,7 @@ export default class BottomNavigationItem extends PureComponent {
   static defaultProps = {
     active: false,
     palette: 'background',
-    onPress: () => { }
+    onPress: () => {}
   }
 
   render() {
@@ -39,21 +38,25 @@ export default class BottomNavigationItem extends PureComponent {
     return (
       <TouchableWithoutFeedback onPress={this._onPress}>
         <View style={styles.container}>
-          {this.props.iconName && <Icon
-            active={this.props.active}
-            color={color}
-            focus={this.props.active}
-            name={this.props.iconName}
-            palette={this.props.palette}
-            set={this.props.iconSet} />}
-          {this.props.title && <Text style={this.props.titleStyle}
-            color={color}
-            enable={this.props.active}
-            palette={this.props.palette}
-            subType="primary"
-            type="caption">
-            {this._getTitle()}
-          </Text>}
+          {this.props.iconName &&
+            <Icon
+              active={this.props.active}
+              color={color}
+              focus={this.props.active}
+              name={this.props.iconName}
+              palette={this.props.palette}
+              set={this.props.iconSet}
+            />}
+          {this.props.title &&
+            <Text
+              style={this.props.titleStyle}
+              color={color}
+              enable={this.props.active}
+              palette={this.props.palette}
+              subType="primary"
+              type="caption">
+              {this._getTitle()}
+            </Text>}
         </View>
       </TouchableWithoutFeedback>
     )
@@ -67,7 +70,9 @@ export default class BottomNavigationItem extends PureComponent {
   }
 
   _getTitle = () => {
-    return Utils.isString(this.props.title) ? this.props.title.toUpperCase() : this.props.title
+    return Utils.isString(this.props.title)
+      ? this.props.title.toUpperCase()
+      : this.props.title
   }
 
   _onPress = () => {
@@ -75,13 +80,16 @@ export default class BottomNavigationItem extends PureComponent {
   }
 }
 
-const Styles = StyleSheet.create((theme, { style }) => {
-  const container = {
-    alignItems: 'center',
-    justifyContent: 'center',
-    flex: 1,
-    height: theme.bottomNavigation.height,
-    ...style
-  }
-  return { container }
-}, ['style'])
+const Styles = StyleSheet.create(
+  (theme, { style }) => {
+    const container = {
+      alignItems: 'center',
+      justifyContent: 'center',
+      flex: 1,
+      height: theme.bottomNavigation.height,
+      ...style
+    }
+    return { container }
+  },
+  ['style']
+)

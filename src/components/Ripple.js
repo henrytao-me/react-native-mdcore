@@ -3,10 +3,9 @@ import { TouchableWithoutFeedback, View } from 'react-native'
 
 import PropTypes from './PropTypes'
 import PureComponent from './PureComponent'
-import StyleSheet from './StyleSheet'
+// import StyleSheet from './StyleSheet'
 
 export default class Ripple extends PureComponent {
-
   static contextTypes = {
     theme: PropTypes.any
   }
@@ -20,7 +19,7 @@ export default class Ripple extends PureComponent {
   }
 
   static defaultProps = {
-    opPress: () => { }
+    opPress: () => {}
   }
 
   state = {
@@ -38,6 +37,6 @@ export default class Ripple extends PureComponent {
   }
 }
 
-const Styles = StyleSheet.create((theme) => {
-  return {}
-})
+// const Styles = StyleSheet.create(theme => {
+//   return {}
+// })

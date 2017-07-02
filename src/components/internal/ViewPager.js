@@ -1,15 +1,9 @@
+/* eslint-disable */
 import React, { Component } from 'react'
-import {
-  Platform,
-  ScrollView,
-  StyleSheet,
-  View,
-  ViewPagerAndroid
-} from 'react-native'
+import { Platform, ScrollView, StyleSheet, View } from 'react-native'
 import PropTypes from 'prop-types'
 
 export default class ViewPager extends Component {
-
   static propTypes = {
     bounces: PropTypes.any,
     count: PropTypes.number,
@@ -18,7 +12,7 @@ export default class ViewPager extends Component {
   }
 
   static defaultProps = {
-    onSelectedIndexChange: (_index) => { }
+    onSelectedIndexChange: _index => {}
   }
 
   constructor(props) {
@@ -48,7 +42,7 @@ export default class ViewPager extends Component {
         ref="scrollview"
         contentOffset={{
           x: this.state.width * this.state.initialSelectedIndex,
-          y: 0,
+          y: 0
         }}
         style={[styles.scrollview, this.props.style]}
         horizontal={true}
@@ -63,7 +57,8 @@ export default class ViewPager extends Component {
         showsHorizontalScrollIndicator={false}
         showsVerticalScrollIndicator={false}
         keyboardShouldPersistTaps="always"
-        onLayout={this.adjustCardSize}>
+        onLayout={this.adjustCardSize}
+      >
         {this.renderContent()}
       </ScrollView>
     )
@@ -76,7 +71,8 @@ export default class ViewPager extends Component {
         initialPage={this.state.initialSelectedIndex}
         onPageSelected={this.handleHorizontalScroll}
         style={[styles.container, this.props.style]}
-        onLayout={this.adjustCardSize}>
+        onLayout={this.adjustCardSize}
+      >
         {this.renderContent()}
       </ViewPagerAndroid>
     )
@@ -85,7 +81,7 @@ export default class ViewPager extends Component {
   adjustCardSize(e) {
     this.setState({
       width: e.nativeEvent.layout.width,
-      height: e.nativeEvent.layout.height,
+      height: e.nativeEvent.layout.height
     })
   }
 
@@ -94,7 +90,7 @@ export default class ViewPager extends Component {
       if (Platform.OS === 'ios') {
         this.refs.scrollview.scrollTo({
           x: nextProps.selectedIndex * this.state.width,
-          animated: true,
+          animated: true
         })
         this.setState({ scrollingTo: nextProps.selectedIndex })
       } else {
@@ -110,38 +106,44 @@ export default class ViewPager extends Component {
     if (!this.props.children) {
       return null
     }
-    return this.props.children.map((child, i) => (
+    return this.props.children.map((child, i) =>
       <View style={[style, { width, height }]} key={'r_' + i}>
         {child}
       </View>
-    ))
+    )
   }
 
   handleHorizontalScroll(e) {
     let selectedIndex = e.nativeEvent.position
     if (selectedIndex === undefined) {
       selectedIndex = Math.round(
-        e.nativeEvent.contentOffset.x / this.state.width,
+        e.nativeEvent.contentOffset.x / this.state.width
       )
     }
     if (selectedIndex < 0 || selectedIndex >= this.props.count) {
       return
     }
-    if (this.state.scrollingTo !== null && this.state.scrollingTo !== selectedIndex) {
+    if (
+      this.state.scrollingTo !== null &&
+      this.state.scrollingTo !== selectedIndex
+    ) {
       return
     }
-    if (this.props.selectedIndex !== selectedIndex || this.state.scrollingTo !== null) {
+    if (
+      this.props.selectedIndex !== selectedIndex ||
+      this.state.scrollingTo !== null
+    ) {
       this.setState({ selectedIndex, scrollingTo: null })
       const { onSelectedIndexChange } = this.props
       onSelectedIndexChange && onSelectedIndexChange(selectedIndex)
     }
   }
 
-  setPage = (index) => {
+  setPage = index => {
     if (Platform.OS === 'ios') {
       this.refs.scrollview.scrollTo({
         x: index * this.state.width,
-        animated: true,
+        animated: true
       })
       this.setState({ scrollingTo: index })
     } else {
@@ -152,13 +154,13 @@ export default class ViewPager extends Component {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    flex: 1
   },
   scrollview: {
     flex: 1,
-    backgroundColor: 'transparent',
+    backgroundColor: 'transparent'
   },
   card: {
-    backgroundColor: 'transparent',
+    backgroundColor: 'transparent'
   }
 })

@@ -1,9 +1,11 @@
 import * as Utils from '../libs/utils'
 
 export default class StyleSheet {
-
-  static create(creator = (_theme, ..._args) => { }, ...whitelists) {
-    return new StyleSheet(Utils.isFunction(creator) ? creator : () => creator, ...whitelists)
+  static create(creator = (_theme, ..._args) => {}, ...whitelists) {
+    return new StyleSheet(
+      Utils.isFunction(creator) ? creator : () => creator,
+      ...whitelists
+    )
   }
 
   static _getThemeId(theme) {
@@ -21,7 +23,12 @@ export default class StyleSheet {
 
   get(theme = null, ...args) {
     args = args.map((arg, index) => {
-      const whitelist = Utils.idx(this._whitelists, whitelists => Utils.isArray(whitelists[index]) ? whitelists[index] : undefined) || []
+      const whitelist =
+        Utils.idx(
+          this._whitelists,
+          whitelists =>
+            Utils.isArray(whitelists[index]) ? whitelists[index] : undefined
+        ) || []
       if (whitelist.length > 0) {
         return whitelist.reduce((acc, key) => {
           acc[key] = arg[key]
@@ -40,6 +47,10 @@ export default class StyleSheet {
   }
 
   _shouldRenewCache(theme = null, args) {
-    return theme !== this._theme || this.constructor._getThemeId(theme) !== this._themeId || !Utils.deepEqual(args, this._args)
+    return (
+      theme !== this._theme ||
+      this.constructor._getThemeId(theme) !== this._themeId ||
+      !Utils.deepEqual(args, this._args)
+    )
   }
 }

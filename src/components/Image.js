@@ -8,7 +8,6 @@ import StyleSheet from './StyleSheet'
 import * as Utils from '../libs/utils'
 
 export default class Image extends PureComponent {
-
   static propTypes = {
     height: PropTypes.number,
     placeholder: PropTypes.imageSource,
@@ -50,9 +49,11 @@ export default class Image extends PureComponent {
     })
     return (
       <View style={styles.container} onLayout={this._onLayout}>
-        <RNImage style={styles.image}
+        <RNImage
+          style={styles.image}
           resizeMode={this.props.resizeMode}
-          source={image} />
+          source={image}
+        />
       </View>
     )
   }
@@ -64,12 +65,23 @@ export default class Image extends PureComponent {
   _getImage = () => {
     const source = this._getSource()
     const placeholder = this._getPlaceholder()
-    return (!!source && !!source.uri ? source : null) || (!!placeholder && !!placeholder.uri ? placeholder : null)
+    return (
+      (!!source && !!source.uri ? source : null) ||
+      (!!placeholder && !!placeholder.uri ? placeholder : null)
+    )
   }
 
   _getPlaceholder = () => {
-    const placeholder = Utils.isString(this.props.placeholder) ? { uri: this.props.placeholder } : this.props.placeholder
-    return RNImage.resolveAssetSource(placeholder) || { uri: undefined, width: undefined, height: undefined }
+    const placeholder = Utils.isString(this.props.placeholder)
+      ? { uri: this.props.placeholder }
+      : this.props.placeholder
+    return (
+      RNImage.resolveAssetSource(placeholder) || {
+        uri: undefined,
+        width: undefined,
+        height: undefined
+      }
+    )
   }
 
   _getRadius = () => {
@@ -86,15 +98,23 @@ export default class Image extends PureComponent {
   }
 
   _getSource = () => {
-    const source = Utils.isString(this.props.source) ? { uri: this.props.source } : this.props.source
-    return RNImage.resolveAssetSource(source) || { uri: undefined, width: undefined, height: undefined }
+    const source = Utils.isString(this.props.source)
+      ? { uri: this.props.source }
+      : this.props.source
+    return (
+      RNImage.resolveAssetSource(source) || {
+        uri: undefined,
+        width: undefined,
+        height: undefined
+      }
+    )
   }
 
   _getWidth = () => {
     return this.props.width || this.state.width
   }
 
-  _onLayout = (e) => {
+  _onLayout = e => {
     const { scaleType } = this.props
     const { layout } = e.nativeEvent
     const image = this._getImage()
@@ -114,22 +134,35 @@ export default class Image extends PureComponent {
       return
     }
     this.setState({
-      width: scaleType === 'width' || scaleType === 'none' ? layout.width : layout.height * width / height,
-      height: scaleType === 'height' || scaleType === 'none' ? layout.height : layout.width * height / width
+      width:
+        scaleType === 'width' || scaleType === 'none'
+          ? layout.width
+          : layout.height * width / height,
+      height:
+        scaleType === 'height' || scaleType === 'none'
+          ? layout.height
+          : layout.width * height / width
     })
   }
 }
 
-const Styles = StyleSheet.create((theme, { height, style, width }, { height: imageHeight, radius: imageRadius, width: imageWidth }) => {
-  const container = {
-    height,
-    width,
-    ...style
-  }
-  const image = {
-    borderRadius: imageRadius,
-    height: imageHeight,
-    width: imageWidth
-  }
-  return { container, image }
-}, ['height', 'style', 'width'])
+const Styles = StyleSheet.create(
+  (
+    theme,
+    { height, style, width },
+    { height: imageHeight, radius: imageRadius, width: imageWidth }
+  ) => {
+    const container = {
+      height,
+      width,
+      ...style
+    }
+    const image = {
+      borderRadius: imageRadius,
+      height: imageHeight,
+      width: imageWidth
+    }
+    return { container, image }
+  },
+  ['height', 'style', 'width']
+)

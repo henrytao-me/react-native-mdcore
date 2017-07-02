@@ -55,9 +55,7 @@ export default class Button extends PureComponent {
           buttonStyle={{
             elevation: type === 'borderless' ? 0 : 2,
             backgroundColor:
-              type === 'borderless'
-                ? theme.palette.transparent
-                : backgroundColor
+              type === 'borderless' ? 'transparent' : backgroundColor
           }}
           textStyle={{
             color: type === 'borderless' ? textColorBorderless : textColor,

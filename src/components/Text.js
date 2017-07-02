@@ -2,12 +2,12 @@ import React from 'react'
 import { Text as RNText } from 'react-native'
 
 import PropTypes from './PropTypes'
-import PureComponent from './PureComponent'
 import StyleSheet from './StyleSheet'
+import ThemeComponent from './ThemeComponent'
 
 import * as Utils from '../libs/utils'
 
-export default class Text extends PureComponent {
+export default class Text extends ThemeComponent {
   static contextTypes = {
     theme: PropTypes.any
   }
@@ -32,15 +32,13 @@ export default class Text extends PureComponent {
   }
 
   render() {
-    const color = this._getColor()
-    const defaultStyle = this._getDefaultStyle()
-    const ellipsizeMode = this.props.ellipsizeMode
-    const numberOfLines = this._getNumberOfLines()
+    const { theme } = this.context
+    const styles = Styles.get(theme, this.props, { color: this._getColor() })
     return (
       <RNText
-        style={[defaultStyle, { color }, this.props.style]}
-        ellipsizeMode={ellipsizeMode}
-        numberOfLines={numberOfLines}>
+        style={styles.container}
+        ellipsizeMode={this.props.ellipsizeMode}
+        numberOfLines={styles.numberOfLines}>
         {this.props.children || this.props.value}
       </RNText>
     )
@@ -56,94 +54,78 @@ export default class Text extends PureComponent {
       this.props.color || theme.textColor[subType][this.props.palette]
     return color
   }
+}
 
-  _getDefaultStyle = () => {
-    const { theme } = this.context
-    const styles = Styles.get(theme)
-    return styles[this.props.type]
-  }
+const Styles = StyleSheet.create(
+  (theme, { numberOfLines, style, type }, { color }) => {
+    const defaultStyle = {
+      button: {
+        fontFamily: theme.fontFamily.medium
+      },
+      caption: {
+        fontFamily: theme.fontFamily.regular
+      },
+      body1: {
+        fontFamily: theme.fontFamily.regular
+      },
+      body2: {
+        fontFamily: theme.fontFamily.medium
+      },
+      subhead1: {
+        fontFamily: theme.fontFamily.regular
+      },
+      subhead2: {
+        fontFamily: theme.fontFamily.regular
+      },
+      title: {
+        fontFamily: theme.fontFamily.medium
+      },
+      headline: {
+        fontFamily: theme.fontFamily.regular
+      },
+      display1: {
+        fontFamily: theme.fontFamily.regular
+      },
+      display2: {
+        fontFamily: theme.fontFamily.regular
+      },
+      display3: {
+        fontFamily: theme.fontFamily.regular
+      },
+      display4: {
+        fontFamily: theme.fontFamily.light
+      }
+    }
+    Object.keys(defaultStyle).forEach(key => {
+      defaultStyle[key].fontSize = theme.fontSize[key]
+      defaultStyle[key].lineHeight = theme.lineHeight[key]
+    })
 
-  _getNumberOfLines = () => {
-    let numberOfLines = undefined
-    switch (this.props.type) {
+    let lines = undefined
+    switch (type) {
       case 'button':
       case 'caption':
       case 'title':
       case 'display3':
       case 'display4':
-        numberOfLines = 1
+        lines = 1
         break
       default:
-        numberOfLines = undefined
+        lines = undefined
         break
     }
-    numberOfLines = this.props.numberOfLines || numberOfLines
-    numberOfLines = numberOfLines === 0 ? undefined : numberOfLines
-    return numberOfLines
-  }
-}
+    lines = numberOfLines || lines
+    lines = lines === 0 ? undefined : lines
 
-const Styles = StyleSheet.create(theme => {
-  return {
-    button: {
-      fontFamily: theme.fontFamily.medium,
-      fontSize: theme.fontSize.button,
-      lineHeight: theme.lineHeight.button
-    },
-    caption: {
-      fontFamily: theme.fontFamily.regular,
-      fontSize: theme.fontSize.caption,
-      lineHeight: theme.lineHeight.caption
-    },
-    body1: {
-      fontFamily: theme.fontFamily.regular,
-      fontSize: theme.fontSize.body1,
-      lineHeight: theme.lineHeight.body1
-    },
-    body2: {
-      fontFamily: theme.fontFamily.medium,
-      fontSize: theme.fontSize.body2,
-      lineHeight: theme.lineHeight.body2
-    },
-    subhead1: {
-      fontFamily: theme.fontFamily.regular,
-      fontSize: theme.fontSize.subhead1,
-      lineHeight: theme.lineHeight.subhead1
-    },
-    subhead2: {
-      fontFamily: theme.fontFamily.regular,
-      fontSize: theme.fontSize.subhead2,
-      lineHeight: theme.lineHeight.subhead2
-    },
-    title: {
-      fontFamily: theme.fontFamily.medium,
-      fontSize: theme.fontSize.title,
-      lineHeight: theme.lineHeight.title
-    },
-    headline: {
-      fontFamily: theme.fontFamily.regular,
-      fontSize: theme.fontSize.headline,
-      lineHeight: theme.lineHeight.headline
-    },
-    display1: {
-      fontFamily: theme.fontFamily.regular,
-      fontSize: theme.fontSize.display1,
-      lineHeight: theme.lineHeight.display1
-    },
-    display2: {
-      fontFamily: theme.fontFamily.regular,
-      fontSize: theme.fontSize.display2,
-      lineHeight: theme.lineHeight.display2
-    },
-    display3: {
-      fontFamily: theme.fontFamily.regular,
-      fontSize: theme.fontSize.display3,
-      lineHeight: theme.lineHeight.display3
-    },
-    display4: {
-      fontFamily: theme.fontFamily.light,
-      fontSize: theme.fontSize.display4,
-      lineHeight: theme.lineHeight.display4
+    const container = {
+      ...defaultStyle[type],
+      ...style,
+      color
     }
-  }
-})
+    if (!lines || lines < 2) {
+      container.lineHeight = undefined
+    }
+    return { container, numberOfLines: lines }
+  },
+  ['numberOfLines', 'style', 'type']
+)

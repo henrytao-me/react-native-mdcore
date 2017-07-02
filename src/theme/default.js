@@ -155,7 +155,6 @@ export default {
     threeLineAvatarWithTextAndIconHeight: 88
   },
   palette: {
-    transparent: 'transparent',
     primary: '#03A9F4',
     primaryDark: '#0288D1',
     primaryLight: '#B3E5FC',
@@ -168,6 +167,20 @@ export default {
     background: '#FAFAFA',
     backgroundDark: '#EEEEEE',
     backgroundLight: '#FFFFFF'
+  },
+  paletteMode: {
+    primary: 'dark',
+    primaryDark: 'dark',
+    primaryLight: 'light',
+    accent: 'light',
+    accentDark: 'light',
+    accentLight: 'light',
+    warn: 'light',
+    warnDark: 'dark',
+    warnLight: 'dark',
+    background: 'light',
+    backgroundDark: 'light',
+    backgroundLight: 'light'
   },
   tab: {
     iconOnlyHeight: 48,

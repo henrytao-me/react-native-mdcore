@@ -14,11 +14,11 @@ import Zocial from 'react-native-vector-icons/Zocial'
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons'
 
 import PropTypes from './PropTypes'
-import PureComponent from './PureComponent'
+import ThemeComponent from './ThemeComponent'
 
 import * as Utils from '../libs/utils'
 
-export default class Icon extends PureComponent {
+export default class Icon extends ThemeComponent {
   static DEFAULT_ICON_SET = 'MaterialIcons'
 
   static ICON_SETS = {

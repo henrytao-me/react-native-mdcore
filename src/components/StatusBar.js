@@ -3,10 +3,10 @@ import { Platform, StatusBar as RNStatusBar, View } from 'react-native'
 
 import NativeModules from './NativeModules'
 import PropTypes from './PropTypes'
-import PureComponent from './PureComponent'
 import StyleSheet from './StyleSheet'
+import ThemeComponent from './ThemeComponent'
 
-export default class StatusBar extends PureComponent {
+export default class StatusBar extends ThemeComponent {
   static contextTypes = {
     theme: PropTypes.any
   }
@@ -43,11 +43,11 @@ const Styles = StyleSheet.create(
     const bar =
       barStyle || (Platform.OS === 'ios' ? 'dark-content' : 'light-content')
     const container = {
-      backgroundColor,
+      backgroundColor: backgroundColor || theme.palette.primary,
       height,
       ...style
     }
-    return { bar, container }
+    return { barStyle: bar, container }
   },
   ['backgroundColor', 'barStyle', 'style']
 )

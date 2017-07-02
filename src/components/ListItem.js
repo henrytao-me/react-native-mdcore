@@ -157,8 +157,8 @@ const Styles = StyleSheet.create(
     const avatar = {
       position: 'absolute',
       height: theme.list.avatarSize,
-      left: theme.list.paddingLeft,
-      top: _isThreeLine(type) ? theme.list.paddingLeft : undefined,
+      left: theme.list.padding.horizontal,
+      top: _isThreeLine(type) ? theme.list.padding.horizontal : undefined,
       width: theme.list.avatarSize,
       ...avatarStyle
     }
@@ -167,7 +167,7 @@ const Styles = StyleSheet.create(
       minHeight: _getMinHeight(theme, type),
       paddingLeft:
         _hasAvatar(type) || _hasIcon(type)
-          ? theme.list.paddingLeft + theme.list.avatarSize
+          ? theme.list.padding.horizontal + theme.list.avatarSize
           : 0,
       paddingRight: _hasAvatar(type) ? theme.list.iconSize : 0,
       ...style
@@ -187,10 +187,10 @@ const Styles = StyleSheet.create(
       ...textStyle
     }
     const textWrapper = {
-      paddingBottom: theme.list.paddingBottom,
-      paddingLeft: theme.list.paddingLeft,
-      paddingRight: theme.list.paddingRight,
-      paddingTop: theme.list.paddingTop
+      paddingBottom: theme.list.padding.vertical,
+      paddingLeft: theme.list.padding.horizontal,
+      paddingRight: theme.list.padding.horizontal,
+      paddingTop: theme.list.padding.vertical
     }
     return { avatar, container, icon, secondaryText, text, textWrapper }
   }

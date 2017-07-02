@@ -138,10 +138,10 @@ export default {
   list: {
     avatarSize: 40,
     iconSize: 48,
-    paddingTop: 8,
-    paddingBottom: 8,
-    paddingLeft: 16,
-    paddingRight: 16,
+    padding: {
+      horizontal: 16,
+      vertical: 8
+    },
     singleLineTextOnlyHeight: 48,
     singleLineIconWithTextHeight: 48,
     singleLineAvatarWithTextHeight: 56,

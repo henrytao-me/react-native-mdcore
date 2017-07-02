@@ -2,10 +2,10 @@ import React from 'react'
 import { View } from 'react-native'
 
 import PropTypes from './PropTypes'
-import PureComponent from './PureComponent'
 import StyleSheet from './StyleSheet'
+import ThemeComponent from './ThemeComponent'
 
-export default class Divider extends PureComponent {
+export default class Divider extends ThemeComponent {
   static contextTypes = {
     theme: PropTypes.any
   }
@@ -27,7 +27,7 @@ const Styles = StyleSheet.create(
       backgroundColor: theme.divider.color,
       height: theme.divider.size,
       marginLeft: largePadding
-        ? 2 * theme.list.paddingLeft + theme.list.avatarSize
+        ? 2 * theme.list.padding.horizontal + theme.list.avatarSize
         : 0,
       ...style
     }

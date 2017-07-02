@@ -47,9 +47,9 @@ const Styles = StyleSheet.create(
       height: theme.list.singleLineTextOnlyHeight,
       justifyContent: 'center',
       paddingLeft: extraSpacing
-        ? 2 * theme.list.paddingLeft + theme.list.avatarSize
-        : theme.list.paddingLeft,
-      paddingRight: theme.list.paddingRight,
+        ? 2 * theme.list.padding.horizontal + theme.list.avatarSize
+        : theme.list.padding.horizontal,
+      paddingRight: theme.list.padding.horizontal,
       ...style
     }
     return { container }

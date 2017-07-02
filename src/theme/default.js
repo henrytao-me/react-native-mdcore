@@ -137,6 +137,7 @@ export default {
   },
   list: {
     avatarSize: 40,
+    iconSize: 48,
     paddingTop: 8,
     paddingBottom: 8,
     paddingLeft: 16,

@@ -1,13 +1,13 @@
 import React from 'react'
-import { Image as RNImage, View } from 'react-native'
+import { Image as RNImage, TouchableWithoutFeedback, View } from 'react-native'
 
 import PropTypes from './PropTypes'
-import PureComponent from './PureComponent'
 import StyleSheet from './StyleSheet'
+import ThemeComponent from './ThemeComponent'
 
 import * as Utils from '../libs/utils'
 
-export default class Image extends PureComponent {
+export default class Image extends ThemeComponent {
   static propTypes = {
     height: PropTypes.number,
     placeholder: PropTypes.imageSource,
@@ -15,13 +15,15 @@ export default class Image extends PureComponent {
     resizeMode: PropTypes.imageResizeMode,
     scaleType: PropTypes.imageScaleType,
     source: PropTypes.imageSource,
-    width: PropTypes.number
+    width: PropTypes.number,
+    onPress: PropTypes.func
   }
 
   static defaultProps = {
     radius: 'none',
     resizeMode: 'contain',
-    scaleType: 'width'
+    scaleType: 'width',
+    onPress: () => {}
   }
 
   state = {
@@ -48,14 +50,32 @@ export default class Image extends PureComponent {
       width: this._getWidth()
     })
     return (
-      <View style={styles.container} onLayout={this._onLayout}>
-        <RNImage
-          style={styles.image}
-          resizeMode={this.props.resizeMode}
-          source={image}
-        />
-      </View>
+      <TouchableWithoutFeedback onPress={this._onPress}>
+        <View style={styles.container} onLayout={this._onLayout}>
+          <RNImage
+            style={styles.image}
+            resizeMode={this.props.resizeMode}
+            source={image}
+          />
+        </View>
+      </TouchableWithoutFeedback>
     )
+  }
+
+  _computeImageSize = (scaleType, layout, width, height) => {
+    if (!this._mounted) {
+      return
+    }
+    this.setState({
+      width:
+        scaleType === 'width' || scaleType === 'none'
+          ? layout.width
+          : layout.height * width / height,
+      height:
+        scaleType === 'height' || scaleType === 'none'
+          ? layout.height
+          : layout.width * height / width
+    })
   }
 
   _getHeight = () => {
@@ -129,20 +149,8 @@ export default class Image extends PureComponent {
     }
   }
 
-  _computeImageSize = (scaleType, layout, width, height) => {
-    if (!this._mounted) {
-      return
-    }
-    this.setState({
-      width:
-        scaleType === 'width' || scaleType === 'none'
-          ? layout.width
-          : layout.height * width / height,
-      height:
-        scaleType === 'height' || scaleType === 'none'
-          ? layout.height
-          : layout.width * height / width
-    })
+  _onPress = () => {
+    this.props.onPress({ ...this.props })
   }
 }
 

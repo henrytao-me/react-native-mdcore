@@ -18,16 +18,19 @@ export default class ListItem extends ThemeComponent {
     avatar: PropTypes.imageSource,
     avatarPlaceholder: PropTypes.imageSource,
     avatarRadius: PropTypes.imageRadius,
+    avatarStyle: PropTypes.style,
     data: PropTypes.any,
     icon: PropTypes.string,
     iconColor: PropTypes.color,
-    iconSet: PropTypes.name,
+    iconSet: PropTypes.string,
     iconSize: PropTypes.number,
     iconStyle: PropTypes.style,
     secondaryText: PropTypes.text,
+    secondaryTextColor: PropTypes.color,
     secondaryTextMaxLines: PropTypes.number,
     secondaryTextStyle: PropTypes.style,
     text: PropTypes.text,
+    textColor: PropTypes.color,
     textMaxLines: PropTypes.number,
     textStyle: PropTypes.style,
     touchable: PropTypes.bool,
@@ -56,161 +59,72 @@ export default class ListItem extends ThemeComponent {
   }
 
   _renderAvatar = () => {
-    const { theme } = this.context
-    const {
-      avatar,
-      avatarPlaceholder,
-      avatarRadius,
-      touchable,
-      data,
-      onAvatarPress,
-      renderAvatar,
-      type
-    } = this.props
-    const styles = Styles.get(theme, { type })
-    if (!_hasAvatar(type)) {
-      return null
+    if (this.props.renderAvatar) {
+      return this.props.renderAvatar({ ...this.props })
     }
-    if (renderAvatar) {
-      return renderAvatar(data, styles)
-    }
-    const touchable = touchable && !!onAvatarPress
-    const content = (
+    const styles = Styles.get(this.context.theme, this.props)
+    return (
+      _hasAvatar(this.props.type) &&
+      !!this.props.avatar &&
       <Image
-        style={[styles.avatar]}
-        placeholder={avatarPlaceholder}
-        radius={avatarRadius}
-        source={avatar}
+        style={styles.avatar}
+        placeholder={this.props.avatarPlaceholder}
+        radius={this.props.avatarRadius}
+        source={this.props.avatar}
       />
     )
-    if (touchable) {
-      return (
-        <TouchableWithoutFeedback onPress={this._onAvatarPress}>
-          {content}
-        </TouchableWithoutFeedback>
-      )
-    }
-    return content
   }
 
   _renderIcon = () => {
-    const { theme } = this.context
-    const {
-      data,
-      icon,
-      iconColor,
-      iconSet,
-      iconSize,
-      iconStyle,
-      onIconPress,
-      renderIcon,
-      type
-    } = this.props
-    const styles = Styles.get(theme, { type })
-    if (!_hasIcon(type)) {
-      return null
+    if (this.props.renderIcon) {
+      return this.props.renderIcon({ ...this.props })
     }
-    if (renderIcon) {
-      return renderIcon(data, styles)
-    }
+    const styles = Styles.get(this.context.theme, this.props)
     return (
+      _hasIcon(this.props.type) &&
+      !!this.props.icon &&
       <IconToggle
-        style={[styles.icon, iconStyle]}
-        touchable={!!onIconPress}
-        color={iconColor}
-        iconSet={iconSet}
-        name={icon}
-        size={iconSize}
-        onPress={this._onIconPress}
+        style={styles.icon}
+        color={this.props.iconColor}
+        name={this.props.icon}
+        set={this.props.iconSet}
+        size={this.props.iconSize}
+        onPress={this.props.onIconPress}
       />
     )
   }
 
   _renderText = () => {
-    const { theme } = this.context
-    const {
-      data,
-      renderText,
-      mainTextProps,
-      secondaryText,
-      text,
-      tertiaryText,
-      type
-    } = this.props
-    const styles = Styles.get(theme, { type })
-    if (renderText) {
-      return renderText(data, styles)
+    if (this.props.renderText) {
+      return this.props.renderText({ ...this.props })
     }
-    const maxLines = _getMaxLines(type)
-    const textMaxLines =
-      this.props.textMaxLines ||
-      (this.props.textMaxLines === undefined ? maxLines.text : undefined)
-    const secondaryTextMaxLines =
-      this.props.secondaryTextMaxLines ||
-      (this.props.textMaxLines === undefined
-        ? maxLines.secondaryText
-        : undefined)
-    if (type.indexOf('single') === 0) {
-      return (
-        <Text
-          style={[styles.text, this.props.textStyle]}
-          ellipsizeMode="tail"
-          numberOfLines={textMaxLines}
-          {...mainTextProps}>
-          {text}
-        </Text>
-      )
-    } else if (type.indexOf('two') === 0) {
-      return (
-        <View>
+    const maxLines = _getMaxLines(this.props.type)
+    const styles = Styles.get(this.context.theme, this.props)
+    return (
+      <View style={styles.textWrapper}>
+        {!!this.props.text &&
           <Text
-            style={[styles.text, this.props.textStyle]}
-            ellipsizeMode="tail"
-            numberOfLines={textMaxLines}
+            style={styles.text}
+            color={this.props.textColor}
+            numberOfLines={this.props.textMaxLines || maxLines.text}
             subType="primary"
-            type="subhead1">
-            {text}
-          </Text>
+            type="subhead1"
+            value={this.props.text}
+          />}
+        {!_isSingleLine(this.props.type) &&
+          !!this.props.secondaryText &&
           <Text
-            style={[styles.secondaryText, this.props.secondaryTextStyle]}
-            ellipsizeMode="tail"
-            numberOfLines={secondaryTextMaxLines}
+            style={styles.secondaryText}
+            color={this.props.secondaryTextColor}
+            numberOfLines={
+              this.props.secondaryTextMaxLines || maxLines.secondaryText
+            }
             subType="secondary"
-            type="body1">
-            {secondaryText}
-          </Text>
-        </View>
-      )
-    } else {
-      return (
-        <View>
-          <Text
-            style={[styles.text, this.props.textStyle]}
-            ellipsizeMode="tail"
-            numberOfLines={textMaxLines}
-            subType="primary"
-            type="subhead1">
-            {text}
-          </Text>
-          <Text
-            style={[styles.secondaryText, this.props.secondaryTextStyle]}
-            ellipsizeMode="tail"
-            numberOfLines={secondaryTextMaxLines}
-            subType="secondary"
-            type="body1">
-            {secondaryText}
-          </Text>
-          <Text
-            style={[styles.secondaryText, this.props.secondaryTextStyle]}
-            ellipsizeMode="tail"
-            numberOfLines={secondaryTextMaxLines}
-            subType="secondary"
-            type="body1">
-            {tertiaryText}
-          </Text>
-        </View>
-      )
-    }
+            type="body1"
+            value={this.props.secondaryText}
+          />}
+      </View>
+    )
   }
 
   _onAvatarPress = () => {
@@ -235,63 +149,52 @@ export default class ListItem extends ThemeComponent {
   }
 }
 
-const Styles = StyleSheet.create((theme, { style, type }) => {
-  const minHeight = _getMinHeight(theme, type)
-  const { avatarSize, paddingLeft, paddingRight } = theme.list
-  const iconSize = theme.iconToggle.size
-  let container = null
-  if ((type || '').indexOf('single') > -1) {
-    container = {
-      flexDirection: 'row',
-      alignItems: 'center',
-      minHeight: minHeight
+const Styles = StyleSheet.create(
+  (
+    theme,
+    { avatarStyle, iconStyle, secondaryTextStyle, style, textStyle, type }
+  ) => {
+    const avatar = {
+      position: 'absolute',
+      height: theme.list.avatarSize,
+      left: theme.list.paddingLeft,
+      top: _isThreeLine(type) ? theme.list.paddingLeft : undefined,
+      width: theme.list.avatarSize,
+      ...avatarStyle
     }
-  } else {
-    container = {
+    const container = {
       justifyContent: 'center',
-      minHeight: minHeight
+      minHeight: _getMinHeight(theme, type),
+      paddingLeft:
+        _hasAvatar(type) || _hasIcon(type)
+          ? theme.list.paddingLeft + theme.list.avatarSize
+          : 0,
+      paddingRight: _hasAvatar(type) ? theme.list.iconSize : 0,
+      ...style
     }
+    const icon = {
+      position: 'absolute',
+      left: _hasAvatar(type) ? undefined : 0,
+      right: _hasAvatar(type) ? 0 : undefined,
+      top: _isThreeLine(type) ? 0 : undefined,
+      ...iconStyle
+    }
+    const secondaryText = {
+      marginTop: theme.layout.spacingXs / 2,
+      ...secondaryTextStyle
+    }
+    const text = {
+      ...textStyle
+    }
+    const textWrapper = {
+      paddingBottom: theme.list.paddingBottom,
+      paddingLeft: theme.list.paddingLeft,
+      paddingRight: theme.list.paddingRight,
+      paddingTop: theme.list.paddingTop
+    }
+    return { avatar, container, icon, secondaryText, text, textWrapper }
   }
-
-  const avatar = {
-    position: 'absolute',
-    top: (minHeight - avatarSize) / 2,
-    left: paddingLeft,
-    width: avatarSize,
-    height: avatarSize
-  }
-  const icon = {
-    position: 'absolute',
-    top: (minHeight - iconSize) / 2
-  }
-  if (type.indexOf('avatar') > 0) {
-    icon.right = paddingRight
-  } else {
-    icon.left = 0
-  }
-  const text = {
-    paddingLeft:
-      paddingLeft +
-      (type.indexOf('text-only') > 0 ? 0 : paddingLeft + avatarSize),
-    paddingRight:
-      paddingRight +
-      (type.indexOf('avatar-with-text-and-icon') > 0
-        ? paddingRight + iconSize
-        : 0)
-  }
-  const secondaryText = {
-    paddingLeft:
-      paddingLeft +
-      (type.indexOf('text-only') > 0 ? 0 : paddingLeft + avatarSize),
-    paddingRight:
-      paddingRight +
-      (type.indexOf('avatar-with-text-and-icon') > 0
-        ? paddingRight + iconSize
-        : 0),
-    paddingTop: 2
-  }
-  return { avatar, container, icon, text, secondaryText }
-})
+)
 
 const _getMinHeight = (theme, type) => {
   switch (type) {
@@ -342,7 +245,7 @@ const _getMaxLines = type => {
     case 'three-line-avatar-with-text-and-icon':
       return { text: 1, secondaryText: 2 }
     default:
-      return 0
+      return { text: 0, secondaryText: 0 }
   }
 }
 
@@ -352,4 +255,12 @@ const _hasAvatar = type => {
 
 const _hasIcon = type => {
   return (type || '').indexOf('icon') > 0
+}
+
+const _isSingleLine = type => {
+  return (type || '').indexOf('single') === 0
+}
+
+const _isThreeLine = type => {
+  return (type || '').indexOf('three') === 0
 }

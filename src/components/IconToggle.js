@@ -36,7 +36,15 @@ export default class IconToggle extends ThemeComponent {
         style={styles.container}
         touchable={this.props.touchable}
         onPress={this._onPress}>
-        <Icon {...this.props} />
+        <Icon
+          active={this.props.active}
+          color={this.props.color}
+          focus={this.props.focus}
+          name={this.props.name}
+          palette={this.props.palette}
+          set={this.props.set}
+          size={this.props.size}
+        />
       </Ripple>
     )
   }

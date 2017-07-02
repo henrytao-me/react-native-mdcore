@@ -1,8 +1,8 @@
 import React from 'react'
-import { View } from 'react-native'
 
 import Icon from './Icon'
 import PropTypes from './PropTypes'
+import Ripple from './Ripple'
 import StyleSheet from './StyleSheet'
 import ThemeComponent from './ThemeComponent'
 
@@ -17,33 +17,28 @@ export default class IconToggle extends ThemeComponent {
     focus: PropTypes.bool,
     name: PropTypes.string.isRequired,
     palette: PropTypes.palette,
-    pressable: PropTypes.bool,
     set: PropTypes.string,
     size: PropTypes.number,
+    touchable: PropTypes.bool,
     onPress: PropTypes.func
   }
 
   static defaultProps = {
-    pressable: true,
+    touchable: true,
     onPress: () => {}
   }
 
   render() {
     const { theme } = this.context
     const styles = Styles.get(theme, this.props)
-    const content = (
-      <View style={styles.container}>
+    return (
+      <Ripple
+        style={styles.container}
+        touchable={this.props.touchable}
+        onPress={this._onPress}>
         <Icon {...this.props} />
-      </View>
+      </Ripple>
     )
-    if (this.props.pressable) {
-      return (
-        <View onPress={this._onPress}>
-          {content}
-        </View>
-      )
-    }
-    return content
   }
 
   _onPress = () => {

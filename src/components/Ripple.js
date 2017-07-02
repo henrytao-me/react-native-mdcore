@@ -2,24 +2,27 @@ import React from 'react'
 import { TouchableWithoutFeedback, View } from 'react-native'
 
 import PropTypes from './PropTypes'
-import PureComponent from './PureComponent'
-// import StyleSheet from './StyleSheet'
+import ThemeComponent from './ThemeComponent'
 
-export default class Ripple extends PureComponent {
+export default class Ripple extends ThemeComponent {
   static contextTypes = {
     theme: PropTypes.any
   }
 
   static propTypes = {
+    borderless: PropTypes.bool,
     color: PropTypes.color,
     duration: PropTypes.number,
     opacity: PropTypes.opacity,
     size: PropTypes.number,
+    touchable: PropTypes.bool,
     onPress: PropTypes.func
   }
 
   static defaultProps = {
-    opPress: () => {}
+    borderless: false,
+    touchable: true,
+    onPress: () => {}
   }
 
   state = {

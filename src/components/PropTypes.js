@@ -16,6 +16,20 @@ export default Object.assign({}, PropTypes, {
     }),
     PropTypes.string
   ]),
+  listItemType: PropTypes.oneOf([
+    'single-line-text-only',
+    'single-line-icon-with-text',
+    'single-line-avatar-with-text',
+    'single-line-avatar-with-text-and-icon',
+    'two-line-text-only',
+    'two-line-icon-with-text',
+    'two-line-avatar-with-text',
+    'two-line-avatar-with-text-and-icon',
+    'three-line-text-only',
+    'three-line-icon-with-text',
+    'three-line-avatar-with-text',
+    'three-line-avatar-with-text-and-icon'
+  ]),
   opacity: PropTypes.number,
   palette: PropTypes.oneOf([
     'primary',

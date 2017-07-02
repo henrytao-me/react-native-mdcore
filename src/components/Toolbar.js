@@ -45,9 +45,7 @@ export default class Toolbar extends ThemeComponent {
         {!!this.props.iconName &&
           <IconToggle
             style={styles.icon}
-            color={
-              this.props.iconColor || theme.iconColor.active[this.props.palette]
-            }
+            color={this.props.iconColor}
             name={this.props.iconName}
             palette={this.props.palette}
             set={this.props.iconSet}

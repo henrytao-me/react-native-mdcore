@@ -50,7 +50,7 @@ export default class Icon extends ThemeComponent {
 
   static defaultProps = {
     active: true,
-    focus: false,
+    focus: true,
     palette: 'background'
   }
 

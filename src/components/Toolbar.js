@@ -29,12 +29,12 @@ export default class Toolbar extends ThemeComponent {
     palette: 'primary'
   }
 
-  pureComponentDidMount() {
-    BackNative.addEventListener('hardwareBackPress', this._onBackPressed)
+  componentDidMount() {
+    BackNative.addEventListener('hardwareBackPress', this._onBackPress)
   }
 
-  pureComponentWillUnmount() {
-    BackNative.removeEventListener('hardwareBackPress', this._onBackPressed)
+  componentWillUnmount() {
+    BackNative.removeEventListener('hardwareBackPress', this._onBackPress)
   }
 
   render() {
@@ -49,7 +49,7 @@ export default class Toolbar extends ThemeComponent {
             name={this.props.iconName}
             palette={this.props.palette}
             set={this.props.iconSet}
-            onPress={this._onBackPressed}
+            onPress={this._onIconPress}
           />}
         {this.props.children ||
           <View style={styles.title}>
@@ -75,11 +75,21 @@ export default class Toolbar extends ThemeComponent {
     )
   }
 
-  _onBackPressed = () => {
-    const { onNavigationPress } = this.props
-    if (onNavigationPress) {
-      onNavigationPress()
-      return true
+  _onBackPress = () => {
+    return this._onNavigationPress(true)
+  }
+
+  _onIconPress = () => {
+    return this._onNavigationPress()
+  }
+
+  _onNavigationPress = (hardwareBackPress = false) => {
+    if (this.props.onNavigationPress) {
+      const res = this.props.onNavigationPress({
+        ...this.props,
+        hardwareBackPress
+      })
+      return res === undefined ? true : res
     }
     return false
   }

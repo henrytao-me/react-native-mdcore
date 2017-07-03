@@ -193,7 +193,15 @@ const Styles = StyleSheet.create(
       paddingTop: theme.list.padding.vertical
     }
     return { avatar, container, icon, secondaryText, text, textWrapper }
-  }
+  },
+  [
+    'avatarStyle',
+    'iconStyle',
+    'secondaryTextStyle',
+    'style',
+    'textStyle',
+    'type'
+  ]
 )
 
 const _getMinHeight = (theme, type) => {

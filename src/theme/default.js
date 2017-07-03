@@ -241,6 +241,7 @@ export default {
     }
   },
   toolbar: {
+    elevation: 0,
     minHeight: 56
   }
 }

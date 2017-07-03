@@ -2,6 +2,7 @@ import React from 'react'
 import { View } from 'react-native'
 
 import BackNative from './BackNative'
+import Elevation from './Elevation'
 import IconToggle from './IconToggle'
 import PropTypes from './PropTypes'
 import StyleSheet from './StyleSheet'
@@ -14,6 +15,7 @@ export default class Toolbar extends ThemeComponent {
   }
 
   static propTypes = {
+    elevation: PropTypes.number,
     extraSpace: PropTypes.bool,
     iconColor: PropTypes.string,
     iconName: PropTypes.string,
@@ -40,38 +42,41 @@ export default class Toolbar extends ThemeComponent {
   render() {
     const { theme } = this.context
     const styles = Styles.get(theme, this.props)
+    const elevation = this.props.elevation || theme.toolbar.elevation
     return (
-      <View style={styles.container}>
-        {!!this.props.iconName &&
-          <IconToggle
-            style={styles.icon}
-            color={this.props.iconColor}
-            name={this.props.iconName}
-            palette={this.props.palette}
-            set={this.props.iconSet}
-            onPress={this._onIconPress}
-          />}
-        {this.props.children ||
-          <View style={styles.title}>
-            {!!this.props.title &&
-              <Text
-                type={this.props.subtitle ? 'subhead2' : 'title'}
-                subType="primary"
-                palette={this.props.palette}
-                numberOfLines={1}
-                value={this.props.title}
-              />}
-            {!!this.props.subtitle &&
-              <Text
-                type="body1"
-                subType="secondary"
-                palette={this.props.palette}
-                numberOfLines={1}
-                value={this.props.subtitle}
-              />}
-          </View>}
-        <View style={styles.shadow} />
-      </View>
+      <Elevation elevation={elevation}>
+        <View style={styles.container}>
+          {!!this.props.iconName &&
+            <IconToggle
+              style={styles.icon}
+              color={this.props.iconColor}
+              name={this.props.iconName}
+              palette={this.props.palette}
+              set={this.props.iconSet}
+              onPress={this._onIconPress}
+            />}
+          {this.props.children ||
+            <View style={styles.title}>
+              {!!this.props.title &&
+                <Text
+                  type={this.props.subtitle ? 'subhead2' : 'title'}
+                  subType="primary"
+                  palette={this.props.palette}
+                  numberOfLines={1}
+                  value={this.props.title}
+                />}
+              {!!this.props.subtitle &&
+                <Text
+                  type="body1"
+                  subType="secondary"
+                  palette={this.props.palette}
+                  numberOfLines={1}
+                  value={this.props.subtitle}
+                />}
+            </View>}
+          <View style={styles.shadow} />
+        </View>
+      </Elevation>
     )
   }
 

@@ -8,7 +8,13 @@ export default {
     height: 56
   },
   button: {
-    minWidth: 88
+    borderWidth: 0.87,
+    elevation: 2,
+    externalPadding: 8,
+    internalPadding: 8,
+    height: 36,
+    minWidth: 80,
+    touchTarget: 48
   },
   card: {
     borderRadius: 2,

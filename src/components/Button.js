@@ -1,70 +1,86 @@
 import React from 'react'
-import { View } from 'react-native'
+import { TouchableWithoutFeedback, View } from 'react-native'
 
+import Elevation from './Elevation'
 import PropTypes from './PropTypes'
-import PureComponent from './PureComponent'
-import RNButton from './internal/Button'
+import StyleSheet from './StyleSheet'
+import Text from './Text'
+import ThemeComponent from './ThemeComponent'
 
-export default class Button extends PureComponent {
+import * as Utils from '../libs/utils'
+
+export default class Button extends ThemeComponent {
   static contextTypes = {
     theme: PropTypes.any
   }
 
   static propTypes = {
     palette: PropTypes.palette,
-    title: PropTypes.string.isRequired,
-    type: PropTypes.oneOf(['default', 'borderless']),
+    title: PropTypes.text.isRequired,
+    type: PropTypes.oneOf(['flat', 'raised']),
     onPress: PropTypes.func.isRequired
   }
 
   static defaultProps = {
     palette: 'background',
-    type: 'default'
+    type: 'raised'
   }
 
   render() {
     const { theme } = this.context
-    const fontFamily = theme.fontFamily.medium
-    let { palette, type } = this.props
-    let backgroundColor, textColor, textColorBorderless
-    switch (palette) {
-      case 'primary':
-        backgroundColor = theme.palette.primary
-        textColor = theme.textColor.primary.primary
-        textColorBorderless = theme.palette.primary
-        break
-      case 'accent':
-        backgroundColor = theme.palette.accent
-        textColor = theme.textColor.primary.accent
-        textColorBorderless = theme.palette.accent
-        break
-      case 'warn':
-        backgroundColor = theme.palette.warn
-        textColor = theme.textColor.primary.warn
-        textColorBorderless = theme.palette.warn
-        break
-      default:
-        backgroundColor = theme.palette.backgroundDark
-        textColor = theme.textColor.primary.background
-        textColorBorderless = theme.textColor.primary.background
-        break
-    }
+    const styles = Styles.get(theme, this.props)
+    const elevation = this.props.type === 'raised' ? theme.button.elevation : 0
     return (
-      <View minWidth={theme.button.minWidth}>
-        <RNButton
-          buttonStyle={{
-            backgroundColor:
-              type === 'borderless' ? 'transparent' : backgroundColor
-          }}
-          textStyle={{
-            color: type === 'borderless' ? textColorBorderless : textColor,
-            fontFamily: fontFamily,
-            fontWeight: 'normal'
-          }}
-          title={this.props.title}
-          onPress={this.props.onPress}
-        />
-      </View>
+      <TouchableWithoutFeedback>
+        <Elevation fallbackStyle={styles.fallback} elevation={elevation}>
+          <View style={styles.container}>
+            <Text
+              color={styles.textColor}
+              palette={this.props.palette}
+              type="button"
+              value={this._getTitle()}
+            />
+          </View>
+        </Elevation>
+      </TouchableWithoutFeedback>
     )
   }
+
+  _getTitle = () => {
+    if (Utils.isString(this.props.title)) {
+      return this.props.title.toUpperCase()
+    }
+    return this.props.title
+  }
 }
+
+const Styles = StyleSheet.create((theme, { palette, style, type }) => {
+  const container = {
+    alignItems: 'center',
+    justifyContent: 'center',
+    height: theme.button.height,
+    minWidth: theme.button.minWidth,
+    paddingLeft: theme.button.internalPadding,
+    paddingRight: theme.button.internalPadding,
+    marginLeft: theme.button.externalPadding,
+    marginRight: theme.button.externalPadding,
+    marginTop: (theme.button.touchTarget - theme.button.height) / 2,
+    marginBottom: (theme.button.touchTarget - theme.button.height) / 2,
+    borderRadius: 2,
+    backgroundColor: theme.palette[palette],
+    ...style
+  }
+  const fallback = {
+    borderWidth: theme.button.borderWidth,
+    borderColor:
+      palette === 'background'
+        ? theme.palette.backgroundDark
+        : theme.palette[palette]
+  }
+  let textColor = undefined
+  if (type === 'flat') {
+    container.backgroundColor = 'transparent'
+    textColor = palette === 'background' ? undefined : theme.palette[palette]
+  }
+  return { container, fallback, textColor }
+})

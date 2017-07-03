@@ -117,8 +117,8 @@ const Styles = StyleSheet.create(
 
     const container = {
       ...defaultStyle[type],
-      ...style,
-      color
+      color,
+      ...style
     }
     if (!lines || lines < 2) {
       container.lineHeight = undefined

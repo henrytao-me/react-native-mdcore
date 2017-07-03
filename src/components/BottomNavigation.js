@@ -38,9 +38,6 @@ export default class BottomNavigation extends ThemeComponent {
   }
 
   setItem = index => {
-    if (index === this.state.index) {
-      return
-    }
     this.setState({ index })
   }
 

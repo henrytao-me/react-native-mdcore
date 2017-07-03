@@ -7,6 +7,8 @@ import StyleSheet from './StyleSheet'
 import Text from './Text'
 import ThemeComponent from './ThemeComponent'
 
+import * as Utils from '../libs/utils'
+
 export default class BottomNavigationItem extends ThemeComponent {
   static contextTypes = {
     theme: PropTypes.any
@@ -31,13 +33,14 @@ export default class BottomNavigationItem extends ThemeComponent {
   render() {
     const { theme } = this.context
     const styles = Styles.get(theme, this.props)
+    const color = this._getColor()
     return (
       <TouchableWithoutFeedback onPress={this._onPress}>
         <View style={styles.container}>
           {this.props.icon &&
             <Icon
               active={this.props.active}
-              color={this.props.color}
+              color={color}
               focus={this.props.active}
               name={this.props.icon}
               palette={this.props.palette}
@@ -45,7 +48,7 @@ export default class BottomNavigationItem extends ThemeComponent {
             />}
           {this.props.title &&
             <Text
-              color={this.props.color}
+              color={color}
               enable={this.props.active}
               palette={this.props.palette}
               subType="primary"
@@ -59,6 +62,13 @@ export default class BottomNavigationItem extends ThemeComponent {
 
   _onPress = () => {
     this.props.onPress({ ...this.props })
+  }
+
+  _getColor = () => {
+    if (Utils.isFunction(this.props.color)) {
+      return this.props.color(this.props)
+    }
+    return this.props.color
   }
 }
 

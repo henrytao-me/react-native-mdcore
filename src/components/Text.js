@@ -50,9 +50,7 @@ export default class Text extends ThemeComponent {
     }
     const { theme } = this.context
     const subType = this.props.enable ? this.props.subType : 'hint'
-    const color =
-      this.props.color || theme.textColor[subType][this.props.palette]
-    return color
+    return this.props.color || theme.textColor[subType][this.props.palette]
   }
 }
 

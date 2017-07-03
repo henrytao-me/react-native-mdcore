@@ -47,6 +47,9 @@ export {
 }
 
 export { default as BottomNavigation } from './BottomNavigation'
+export {
+  default as BottomNavigationContainer
+} from './BottomNavigationContainer'
 export { default as BottomNavigationItem } from './BottomNavigationItem'
 export { default as Button } from './Button'
 export { default as Card } from './Card'

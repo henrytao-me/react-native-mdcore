@@ -3,13 +3,11 @@ import { TouchableWithoutFeedback, View } from 'react-native'
 
 import Icon from './Icon'
 import PropTypes from './PropTypes'
-import PureComponent from './PureComponent'
 import StyleSheet from './StyleSheet'
 import Text from './Text'
+import ThemeComponent from './ThemeComponent'
 
-import * as Utils from '../libs/utils'
-
-export default class BottomNavigationItem extends PureComponent {
+export default class BottomNavigationItem extends ThemeComponent {
   static contextTypes = {
     theme: PropTypes.any
   }
@@ -17,11 +15,10 @@ export default class BottomNavigationItem extends PureComponent {
   static propTypes = {
     active: PropTypes.bool,
     color: PropTypes.color,
-    iconName: PropTypes.string,
+    icon: PropTypes.string.isRequired,
     iconSet: PropTypes.string,
     palette: PropTypes.palette,
-    title: PropTypes.text,
-    titleStyle: PropTypes.style,
+    title: PropTypes.text.isRequired,
     onPress: PropTypes.func
   }
 
@@ -33,46 +30,31 @@ export default class BottomNavigationItem extends PureComponent {
 
   render() {
     const { theme } = this.context
-    const color = this._getColor()
     const styles = Styles.get(theme, this.props)
     return (
       <TouchableWithoutFeedback onPress={this._onPress}>
         <View style={styles.container}>
-          {this.props.iconName &&
+          {this.props.icon &&
             <Icon
               active={this.props.active}
-              color={color}
+              color={this.props.color}
               focus={this.props.active}
-              name={this.props.iconName}
+              name={this.props.icon}
               palette={this.props.palette}
               set={this.props.iconSet}
             />}
           {this.props.title &&
             <Text
-              style={this.props.titleStyle}
-              color={color}
+              color={this.props.color}
               enable={this.props.active}
               palette={this.props.palette}
               subType="primary"
-              type="caption">
-              {this._getTitle()}
-            </Text>}
+              type={this.props.active ? 'body1' : 'caption'}
+              value={this.props.title}
+            />}
         </View>
       </TouchableWithoutFeedback>
     )
-  }
-
-  _getColor = () => {
-    if (Utils.isFunction(this.props.color)) {
-      return this.props.color(this.props)
-    }
-    return this.props.color
-  }
-
-  _getTitle = () => {
-    return Utils.isString(this.props.title)
-      ? this.props.title.toUpperCase()
-      : this.props.title
   }
 
   _onPress = () => {

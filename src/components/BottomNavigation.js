@@ -2,10 +2,12 @@ import React from 'react'
 import { View } from 'react-native'
 
 import PropTypes from './PropTypes'
-import PureComponent from './PureComponent'
 import StyleSheet from './StyleSheet'
+import ThemeComponent from './ThemeComponent'
 
-export default class BottomNavigation extends PureComponent {
+import * as Utils from '../libs/utils'
+
+export default class BottomNavigation extends ThemeComponent {
   static contextTypes = {
     theme: PropTypes.any
   }
@@ -18,7 +20,7 @@ export default class BottomNavigation extends PureComponent {
 
   static defaultProps = {
     initialItem: 0,
-    onItemSelected: (_options = { index: 0 }) => {}
+    onItemSelected: () => {}
   }
 
   state = {
@@ -30,7 +32,7 @@ export default class BottomNavigation extends PureComponent {
     const styles = Styles.get(theme, this.props)
     return (
       <View style={styles.container}>
-        {this.props.children && this.props.children.map(this._renderItem)}
+        {Utils.children(this.props.children).map(this._renderItem)}
       </View>
     )
   }
@@ -43,12 +45,12 @@ export default class BottomNavigation extends PureComponent {
   }
 
   _getIndex = () => {
-    return this.state.index !== undefined
-      ? this.state.index
-      : this.props.initialItem
+    return this.state.index === undefined
+      ? this.props.initialItem
+      : this.state.index
   }
 
-  _onItemPress = index => {
+  _onItemPress = ({ index }) => {
     this.setState({ index })
     this.props.onItemSelected({ ...this.props, index })
   }
@@ -57,13 +59,15 @@ export default class BottomNavigation extends PureComponent {
     const { theme } = this.context
     const styles = Styles.get(theme, this.props)
     const active = index === this._getIndex()
-    return React.cloneElement(item, {
-      active,
-      key: index,
-      style: styles.item,
-      tag: index,
-      onPress: this._onItemPress
-    })
+    return (
+      <View key={index} style={styles.item}>
+        {React.cloneElement(item, {
+          active,
+          index,
+          onPress: this._onItemPress
+        })}
+      </View>
+    )
   }
 }
 

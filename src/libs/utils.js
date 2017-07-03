@@ -1,5 +1,9 @@
 import { isImmutable } from './immutable'
 
+export const children = children => {
+  return isArray(children) ? children : children ? [children] : null
+}
+
 export const deepEqual = (a, b, comparator = _comparator) => {
   if (comparator(a, b)) {
     return true

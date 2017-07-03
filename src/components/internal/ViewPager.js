@@ -1,6 +1,12 @@
 /* eslint-disable */
 import React, { Component } from 'react'
-import { Platform, ScrollView, StyleSheet, View } from 'react-native'
+import {
+  Platform,
+  ScrollView,
+  StyleSheet,
+  View,
+  ViewPagerAndroid
+} from 'react-native'
 import PropTypes from 'prop-types'
 
 export default class ViewPager extends Component {
@@ -8,7 +14,8 @@ export default class ViewPager extends Component {
     bounces: PropTypes.any,
     count: PropTypes.number,
     onSelectedIndexChange: PropTypes.func,
-    selectedIndex: PropTypes.number
+    selectedIndex: PropTypes.number,
+    onPageScroll: PropTypes.func
   }
 
   static defaultProps = {
@@ -72,6 +79,7 @@ export default class ViewPager extends Component {
         onPageSelected={this.handleHorizontalScroll}
         style={[styles.container, this.props.style]}
         onLayout={this.adjustCardSize}
+        onPageScroll={this.props.onPageScroll}
       >
         {this.renderContent()}
       </ViewPagerAndroid>

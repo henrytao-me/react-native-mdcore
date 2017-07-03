@@ -44,7 +44,7 @@ export default class Button extends PureComponent {
         textColorBorderless = theme.palette.warn
         break
       default:
-        backgroundColor = theme.palette.background
+        backgroundColor = theme.palette.backgroundDark
         textColor = theme.textColor.primary.background
         textColorBorderless = theme.textColor.primary.background
         break
@@ -53,7 +53,6 @@ export default class Button extends PureComponent {
       <View minWidth={theme.button.minWidth}>
         <RNButton
           buttonStyle={{
-            elevation: type === 'borderless' ? 0 : 2,
             backgroundColor:
               type === 'borderless' ? 'transparent' : backgroundColor
           }}

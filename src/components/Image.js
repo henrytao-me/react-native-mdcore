@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { Component } from 'react'
 import { Image as RNImage, TouchableWithoutFeedback, View } from 'react-native'
 
 import PropTypes from './PropTypes'
@@ -6,6 +6,33 @@ import StyleSheet from './StyleSheet'
 import ThemeComponent from './ThemeComponent'
 
 import * as Utils from '../libs/utils'
+
+const DEEP_PROPS = ['resizeMode', 'source', 'style']
+
+class RawImage extends Component {
+  static propTypes = {
+    resizeMode: PropTypes.any,
+    source: PropTypes.any
+  }
+
+  shouldComponentUpdate(nextProps) {
+    const res = DEEP_PROPS.reduce((acc, key) => {
+      return acc || !Utils.deepEqual(nextProps[key], this.props[key])
+    }, false)
+    return res && !!nextProps.style.width && !!nextProps.style.height
+  }
+
+  render() {
+    console.log('aaaaaaaaaaa', this.props)
+    return (
+      <RNImage
+        style={this.props.style}
+        resizeMode={this.props.resizeMode}
+        source={this.props.source}
+      />
+    )
+  }
+}
 
 export default class Image extends ThemeComponent {
   static propTypes = {
@@ -41,40 +68,24 @@ export default class Image extends ThemeComponent {
     this._onSourceChange(this.props.source)
   }
 
-  acomponentWillReceiveProps(nextProps) {
-    console.log('aaaaaaaaaaa componentWillReceiveProps')
-    this._onSourceChange(nextProps.source)
-  }
-
-  ashouldComponentUpdate(nextProps, nextState, nextContext) {
-    console.log(
-      'aaaaaaaaaaa shouldComponentUpdate',
-      this._onConfigChange(),
-      this.state
-    )
-    // const { finalHeight, finalWidth } = this._onConfigChange()
-    // if (finalHeight > 0 && finalWidth > 0 && ) {
-
-    // }
-    return super.shouldComponentUpdate(nextProps, nextState, nextContext)
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.source !== this.props.source) {
+      this._onSourceChange(nextProps.source)
+    }
   }
 
   render() {
-    console.log('aaaaaaaaaaa', this._onConfigChange(), this.state)
-    const styles = Styles.get(undefined, this.props, {
-      ...this.state,
-      ...this._onConfigChange()
-    })
+    const styles = Styles.get(undefined, this.props, this.state)
     return (
-      <TouchableWithoutFeedback
-        onPress={this._onPress}
-        onLayout={this._onLayout}>
-        <RNImage
-          style={styles.container}
-          resizeMode={this.props.resizeMode}
-          source={this._getImage()}
-        />
-      </TouchableWithoutFeedback>
+      <View onLayout={this._onLayout}>
+        <TouchableWithoutFeedback onPress={this._onPress}>
+          <RawImage
+            style={styles.container}
+            resizeMode={this.props.resizeMode}
+            source={this._getImage()}
+          />
+        </TouchableWithoutFeedback>
+      </View>
     )
   }
 
@@ -97,14 +108,18 @@ export default class Image extends ThemeComponent {
     }
   }
 
-  _onConfigChange = (shouldSetState = false) => {
-    const { ratio } = this.props
-    const { imageHeight, imageWidth } = this.state
-    const layoutHeight = this.state.layoutHeight || this.props.height || 0
-    const layoutWidth = this.state.layoutWidth || this.props.width || 0
+  _onConfigChange = (
+    shouldSetState = false,
+    props = this.props,
+    state = this.state
+  ) => {
+    const { ratio } = props
+    const { imageHeight, imageWidth } = state
+    const layoutHeight = props.height || state.layoutHeight || 0
+    const layoutWidth = props.width || state.layoutWidth || 0
     let finalHeight = 0
     let finalWidth = 0
-    switch (this.props.scaleType) {
+    switch (props.scaleType) {
       case 'height':
         finalHeight = layoutHeight
         finalWidth = layoutHeight * imageWidth / imageHeight

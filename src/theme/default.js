@@ -243,7 +243,7 @@ export default {
     }
   },
   toolbar: {
-    elevation: 0,
+    elevation: 4,
     minHeight: 56
   }
 }

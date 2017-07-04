@@ -21,6 +21,7 @@ export default class Toolbar extends ThemeComponent {
     iconName: PropTypes.string,
     iconSet: PropTypes.string,
     palette: PropTypes.palette,
+    statusBar: PropTypes.element,
     subtitle: PropTypes.text,
     title: PropTypes.text,
     onNavigationPress: PropTypes.func
@@ -45,6 +46,7 @@ export default class Toolbar extends ThemeComponent {
     const elevation = this.props.elevation || theme.toolbar.elevation
     return (
       <Elevation elevation={elevation}>
+        {this.props.statusBar}
         <View style={styles.container}>
           {!!this.props.iconName &&
             <IconToggle

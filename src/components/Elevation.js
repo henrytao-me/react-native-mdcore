@@ -2,6 +2,7 @@ import React from 'react'
 import { Platform, View } from 'react-native'
 
 import PropTypes from './PropTypes'
+import StyleSheet from './StyleSheet'
 import ThemeComponent from './ThemeComponent'
 
 import * as Utils from '../libs/utils'
@@ -17,6 +18,7 @@ export default class Elevation extends ThemeComponent {
   }
 
   render() {
+    const styles = Styles.get()
     let children = Utils.children(this.props.children)
     if (children.length === 0) {
       return null
@@ -24,7 +26,7 @@ export default class Elevation extends ThemeComponent {
       children = children[0]
     } else {
       children = (
-        <View>
+        <View style={styles.container}>
           {children.map(child => child)}
         </View>
       )
@@ -56,3 +58,9 @@ export default class Elevation extends ThemeComponent {
     })
   }
 }
+
+const Styles = StyleSheet.create({
+  container: {
+    borderRadius: 0.1 // workaroud for elevation on Android
+  }
+})

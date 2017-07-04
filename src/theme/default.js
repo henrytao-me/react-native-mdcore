@@ -8,6 +8,7 @@ export default {
     height: 56
   },
   button: {
+    borderRadius: 2,
     borderWidth: 0.87,
     elevation: 2,
     externalPadding: 8,
@@ -18,13 +19,13 @@ export default {
   },
   card: {
     borderRadius: 2,
-    shadowColor: '#000000',
-    shadowOpacity: 0.8,
-    shadowRadius: 10,
-    shadowOffset: {
-      height: 1,
-      width: 0.3
-    }
+    borderWidth: 0.87,
+    elevation: 2,
+    spacingXs: 4,
+    spacingSm: 8,
+    spacing: 16,
+    spacingLg: 24,
+    spacingXlg: 32
   },
   dialog: {
     background: '#303030B3',
@@ -122,24 +123,25 @@ export default {
     size: 48
   },
   layout: {
-    spacing: 16,
-    spacingLg: 32,
+    spacingXs: 4,
     spacingSm: 8,
-    spacingXs: 4
+    spacing: 16,
+    spacingLg: 24,
+    spacingXlg: 32
   },
   lineHeight: {
-    button: 20,
-    caption: 18,
-    body1: 20,
-    body2: 24,
-    subhead1: 24,
-    subhead2: 28,
-    title: 30,
-    headline: 32,
-    display1: 40,
-    display2: 48,
-    display3: 60,
-    display4: 120
+    button: undefined,
+    caption: undefined,
+    body1: 27,
+    body2: 28,
+    subhead1: 31,
+    subhead2: 32,
+    title: undefined,
+    headline: 48,
+    display1: 68,
+    display2: 90,
+    display3: undefined,
+    display4: undefined
   },
   list: {
     avatarSize: 40,

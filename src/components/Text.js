@@ -120,7 +120,7 @@ const Styles = StyleSheet.create(
       color,
       ...style
     }
-    if (!lines || lines < 2) {
+    if (lines === 1) {
       container.lineHeight = undefined
     }
     return { container, numberOfLines: lines }

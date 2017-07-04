@@ -54,33 +54,36 @@ export default class Button extends ThemeComponent {
   }
 }
 
-const Styles = StyleSheet.create((theme, { palette, style, type }) => {
-  const container = {
-    alignItems: 'center',
-    justifyContent: 'center',
-    height: theme.button.height,
-    minWidth: theme.button.minWidth,
-    paddingLeft: theme.button.internalPadding,
-    paddingRight: theme.button.internalPadding,
-    marginLeft: theme.button.externalPadding,
-    marginRight: theme.button.externalPadding,
-    marginTop: (theme.button.touchTarget - theme.button.height) / 2,
-    marginBottom: (theme.button.touchTarget - theme.button.height) / 2,
-    borderRadius: 2,
-    backgroundColor: theme.palette[palette],
-    ...style
-  }
-  const fallback = {
-    borderWidth: theme.button.borderWidth,
-    borderColor:
-      palette === 'background'
-        ? theme.palette.backgroundDark
-        : theme.palette[palette]
-  }
-  let textColor = undefined
-  if (type === 'flat') {
-    container.backgroundColor = 'transparent'
-    textColor = palette === 'background' ? undefined : theme.palette[palette]
-  }
-  return { container, fallback, textColor }
-})
+const Styles = StyleSheet.create(
+  (theme, { palette, style, type }) => {
+    const container = {
+      alignItems: 'center',
+      justifyContent: 'center',
+      height: theme.button.height,
+      minWidth: theme.button.minWidth,
+      paddingLeft: theme.button.internalPadding,
+      paddingRight: theme.button.internalPadding,
+      marginLeft: theme.button.externalPadding,
+      marginRight: theme.button.externalPadding,
+      marginTop: (theme.button.touchTarget - theme.button.height) / 2,
+      marginBottom: (theme.button.touchTarget - theme.button.height) / 2,
+      borderRadius: theme.button.borderRadius,
+      backgroundColor: theme.palette[palette],
+      ...style
+    }
+    const fallback = {
+      borderWidth: theme.button.borderWidth,
+      borderColor:
+        palette === 'background'
+          ? theme.palette.backgroundDark
+          : theme.palette[palette]
+    }
+    let textColor = undefined
+    if (type === 'flat') {
+      container.backgroundColor = 'transparent'
+      textColor = palette === 'background' ? undefined : theme.palette[palette]
+    }
+    return { container, fallback, textColor }
+  },
+  ['palette', 'style', 'type']
+)

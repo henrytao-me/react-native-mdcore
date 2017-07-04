@@ -1,36 +1,49 @@
 import React from 'react'
 import { View } from 'react-native'
 
+import Elevation from './Elevation'
 import PropTypes from './PropTypes'
-import PureComponent from './PureComponent'
 import StyleSheet from './StyleSheet'
+import ThemeComponent from './ThemeComponent'
 
-export default class Card extends PureComponent {
+export default class Card extends ThemeComponent {
   static contextTypes = {
     theme: PropTypes.any
   }
 
+  static propTypes = {
+    borderRadius: PropTypes.number
+  }
+
   render() {
     const { theme } = this.context
-    const styles = Styles.get(theme)
+    const styles = Styles.get(theme, this.props)
     return (
-      <View style={[styles.container, this.props.style]}>
-        {this.props.children}
-      </View>
+      <Elevation
+        fallbackStyle={styles.fallback}
+        elevation={theme.card.elevation}>
+        <View style={styles.container}>
+          {this.props.children}
+        </View>
+      </Elevation>
     )
   }
 }
 
-const Styles = StyleSheet.create(_theme => {
-  const container = {
-    borderRadius: 2,
-    shadowColor: '#000000',
-    shadowOpacity: 1,
-    shadowRadius: 10,
-    shadowOffset: {
-      height: 1,
-      width: 0.3
+const Styles = StyleSheet.create(
+  (theme, { borderRadius, style }) => {
+    const container = {
+      backgroundColor: theme.palette.background,
+      borderRadius:
+        borderRadius === undefined ? theme.card.borderRadius : borderRadius,
+      margin: 8,
+      ...style
     }
-  }
-  return { container }
-})
+    const fallback = {
+      borderWidth: theme.card.borderWidth,
+      borderColor: theme.palette.backgroundDark
+    }
+    return { container, fallback }
+  },
+  ['borderRadius', 'style']
+)

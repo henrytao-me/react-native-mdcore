@@ -43,6 +43,12 @@ export default class StyleSheet {
       this._args = args
       this._style = this._creator(this._theme, ...this._args)
     }
+    if (__DEV__ && args[0] && this._whitelists[0] === undefined) {
+      // eslint-disable-next-line
+      console.warn(
+        'StyleSheet.create(theme, { ... }, [ ... ]) should be optimized'
+      )
+    }
     return this._style
   }
 

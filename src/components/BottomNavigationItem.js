@@ -50,6 +50,7 @@ export default class BottomNavigationItem extends ThemeComponent {
             <Text
               color={color}
               enable={this.props.active}
+              numberOfLines={1}
               palette={this.props.palette}
               subType="primary"
               type={this.props.active ? 'body1' : 'caption'}

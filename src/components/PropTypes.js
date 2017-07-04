@@ -5,7 +5,7 @@ export default Object.assign({}, PropTypes, {
   ellipsizeMode: PropTypes.oneOf(['head', 'middle', 'tail', 'clip']),
   imageRadius: PropTypes.oneOfType([
     PropTypes.number,
-    PropTypes.oneOf(['auto', 'none'])
+    PropTypes.oneOf(['auto'])
   ]),
   imageResizeMode: PropTypes.oneOf(['cover', 'contain', 'stretch', 'center']),
   imageScaleType: PropTypes.oneOf(['width', 'height', 'none']),

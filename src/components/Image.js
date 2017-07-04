@@ -21,159 +21,165 @@ export default class Image extends ThemeComponent {
   }
 
   static defaultProps = {
-    radius: 'none',
+    radius: undefined,
     resizeMode: 'cover',
     scaleType: 'width',
     onPress: () => {}
   }
 
   state = {
-    width: 0,
-    height: 0
+    finalHeight: 0,
+    finalWidth: 0,
+    imageUri: null,
+    imageHeight: 0,
+    imageWidth: 0,
+    layoutHeight: 0,
+    layoutWidth: 0
   }
-
-  _mounted = false
 
   componentDidMount() {
-    this._mounted = true
+    this._onSourceChange(this.props.source)
   }
 
-  componentWillUnmount() {
-    this._mounted = false
+  acomponentWillReceiveProps(nextProps) {
+    console.log('aaaaaaaaaaa componentWillReceiveProps')
+    this._onSourceChange(nextProps.source)
+  }
+
+  ashouldComponentUpdate(nextProps, nextState, nextContext) {
+    console.log(
+      'aaaaaaaaaaa shouldComponentUpdate',
+      this._onConfigChange(),
+      this.state
+    )
+    // const { finalHeight, finalWidth } = this._onConfigChange()
+    // if (finalHeight > 0 && finalWidth > 0 && ) {
+
+    // }
+    return super.shouldComponentUpdate(nextProps, nextState, nextContext)
   }
 
   render() {
-    const image = this._getImage()
-    const radius = this._getRadius()
+    console.log('aaaaaaaaaaa', this._onConfigChange(), this.state)
     const styles = Styles.get(undefined, this.props, {
-      height: this._getHeight(),
-      radius,
-      width: this._getWidth()
+      ...this.state,
+      ...this._onConfigChange()
     })
     return (
       <TouchableWithoutFeedback
         onPress={this._onPress}
         onLayout={this._onLayout}>
-        <View style={styles.container}>
-          <RNImage
-            style={styles.image}
-            resizeMode={this.props.resizeMode}
-            source={image}
-          />
-        </View>
+        <RNImage
+          style={styles.container}
+          resizeMode={this.props.resizeMode}
+          source={this._getImage()}
+        />
       </TouchableWithoutFeedback>
     )
   }
 
-  _computeImageSize = (scaleType, layout, width, height) => {
-    if (!this._mounted) {
-      return
-    }
-    this.setState({
-      width:
-        scaleType === 'width' || scaleType === 'none'
-          ? layout.width
-          : layout.height * width / height,
-      height:
-        scaleType === 'height' || scaleType === 'none'
-          ? layout.height
-          : layout.width * height / width
-    })
-  }
-
-  _getHeight = () => {
-    return this.props.height || this.state.height
-  }
-
   _getImage = () => {
-    const source = this._getSource()
-    const placeholder = this._getPlaceholder()
-    return (
-      (!!source && !!source.uri ? source : null) ||
-      (!!placeholder && !!placeholder.uri ? placeholder : null)
-    )
-  }
-
-  _getPlaceholder = () => {
+    if (this.state.imageUri) {
+      return {
+        height: this.state.imageHeight,
+        uri: this.state.imageUri,
+        width: this.state.imageWidth
+      }
+    }
     const placeholder = Utils.isString(this.props.placeholder)
       ? { uri: this.props.placeholder }
       : this.props.placeholder
-    return (
-      RNImage.resolveAssetSource(placeholder) || {
-        uri: undefined,
-        width: undefined,
-        height: undefined
-      }
-    )
+    return {
+      height: undefined,
+      uri: undefined,
+      width: undefined,
+      ...RNImage.resolveAssetSource(placeholder)
+    }
   }
 
-  _getRadius = () => {
-    const { width, height } = this.state
-    const { radius } = this.props
-    switch (radius) {
-      case 'none':
-        return undefined
-      case 'auto':
-        return Math.min(width, height) / 2
+  _onConfigChange = (shouldSetState = false) => {
+    const { ratio } = this.props
+    const { imageHeight, imageWidth } = this.state
+    const layoutHeight = this.state.layoutHeight || this.props.height || 0
+    const layoutWidth = this.state.layoutWidth || this.props.width || 0
+    let finalHeight = 0
+    let finalWidth = 0
+    switch (this.props.scaleType) {
+      case 'height':
+        finalHeight = layoutHeight
+        finalWidth = layoutHeight * imageWidth / imageHeight
+        if (ratio) {
+          finalWidth = finalHeight * ratio
+        }
+        break
+      case 'width':
+        finalHeight = layoutWidth * imageHeight / imageWidth
+        finalWidth = layoutWidth
+        if (ratio) {
+          finalHeight = finalWidth / ratio
+        }
+        break
       default:
-        return radius
+        finalHeight = layoutHeight
+        finalWidth = layoutWidth
+        break
     }
-  }
-
-  _getSource = () => {
-    const source = Utils.isString(this.props.source)
-      ? { uri: this.props.source }
-      : this.props.source
-    return (
-      RNImage.resolveAssetSource(source) || {
-        uri: undefined,
-        width: undefined,
-        height: undefined
-      }
-    )
-  }
-
-  _getWidth = () => {
-    return this.props.width || this.state.width
-  }
-
-  _onLayout = ({ nativeEvent: { layout } }) => {
-    const { scaleType } = this.props
-    const image = this._getImage()
-    if (!!image && !!image.uri) {
-      if (!!image.width && !!image.height) {
-        this._computeImageSize(scaleType, layout, image.width, image.height)
-      } else {
-        RNImage.getSize(image.uri, (width, height) => {
-          this._computeImageSize(scaleType, layout, width, height)
-        })
-      }
+    finalHeight = finalHeight || 0
+    finalWidth = finalWidth || 0
+    const res = { finalHeight, finalWidth }
+    if (shouldSetState) {
+      this.setState(res)
     }
+    return res
+  }
+
+  _onLayout = ({ nativeEvent: { layout: { height, width } } }) => {
+    this._updateState({
+      layoutHeight: height,
+      layoutWidth: width
+    })
   }
 
   _onPress = () => {
     this.props.onPress({ ...this.props })
   }
+
+  _onSourceChange = source => {
+    const newSource = RNImage.resolveAssetSource(
+      Utils.isString(source) ? { uri: source } : source
+    )
+    if (newSource && newSource.uri) {
+      RNImage.getSize(newSource.uri, (width, height) => {
+        this._updateState({
+          imageHeight: height,
+          imageUri: newSource.uri,
+          imageWidth: width
+        })
+      })
+    }
+  }
+
+  _updateState = newState => {
+    this.setState(newState, () => this._onConfigChange(true))
+  }
 }
 
 const Styles = StyleSheet.create(
-  (
-    theme,
-    { height, style, width },
-    { height: imageHeight, radius: imageRadius, width: imageWidth }
-  ) => {
+  (theme, { height, radius, style, width }, { finalHeight, finalWidth }) => {
+    finalHeight = finalHeight || height
+    finalWidth = finalWidth || width
+    const finalRadius =
+      (radius === 'auto' ? Math.min(finalHeight, finalWidth) / 2 : radius) ||
+      undefined
+
     const container = {
-      alignSelf: 'stretch',
-      height,
-      width,
+      borderRadius: finalRadius,
+      height: finalHeight || undefined,
+      width: finalWidth || undefined,
       ...style
     }
-    const image = {
-      borderRadius: imageRadius,
-      height: imageHeight,
-      width: imageWidth
-    }
-    return { container, image }
+    return { container }
   },
-  ['height', 'style', 'width']
+  ['height', 'radius', 'style', 'width'],
+  ['finalHeight', 'finalWidth']
 )

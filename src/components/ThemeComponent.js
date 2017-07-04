@@ -11,13 +11,12 @@ export default class ThemeComponent extends Component {
 
   _themeId = undefined
 
-  shouldComponentUpdate(
-    nextProps,
-    nextState,
-    nextContext,
-    deepPropKeys = [],
-    ignorePropKeys = []
-  ) {
+  shouldComponentUpdate(nextProps, nextState, nextContext, options = {}) {
+    const {
+      deepPropKeys = [],
+      ignorePropKeys = [],
+      ignoreStateKeys = []
+    } = options
     const currentProps = { ...this.props }
     const newProps = { ...nextProps }
     const currentState = { ...this.state }
@@ -34,6 +33,9 @@ export default class ThemeComponent extends Component {
     })
     ignorePropKeys.forEach(key => {
       currentProps[key] = newProps[key] = undefined
+    })
+    ignoreStateKeys.forEach(key => {
+      currentState[key] = newState[key] = undefined
     })
     return (
       currentThemeId !== newThemeId ||

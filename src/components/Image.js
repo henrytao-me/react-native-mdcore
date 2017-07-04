@@ -23,7 +23,6 @@ class RawImage extends Component {
   }
 
   render() {
-    console.log('aaaaaaaaaaa', this.props)
     return (
       <RNImage
         style={this.props.style}
@@ -39,6 +38,10 @@ export default class Image extends ThemeComponent {
     height: PropTypes.number,
     placeholder: PropTypes.imageSource,
     radius: PropTypes.imageRadius,
+    borderTopLeftRadius: PropTypes.number,
+    borderTopRightRadius: PropTypes.number,
+    borderBottomLeftRadius: PropTypes.number,
+    borderBottomRightRadius: PropTypes.number,
     ratio: PropTypes.number,
     resizeMode: PropTypes.imageResizeMode,
     scaleType: PropTypes.imageScaleType,
@@ -77,7 +80,7 @@ export default class Image extends ThemeComponent {
   render() {
     const styles = Styles.get(undefined, this.props, this.state)
     return (
-      <View onLayout={this._onLayout}>
+      <View style={this.props.style} onLayout={this._onLayout}>
         <TouchableWithoutFeedback onPress={this._onPress}>
           <RawImage
             style={styles.container}
@@ -87,6 +90,15 @@ export default class Image extends ThemeComponent {
         </TouchableWithoutFeedback>
       </View>
     )
+  }
+
+  _getDefinedSize = () => {
+    const props = this.props || {}
+    const style = props.style || {}
+    return {
+      height: style.height || props.height,
+      width: style.width || props.width
+    }
   }
 
   _getImage = () => {
@@ -113,31 +125,34 @@ export default class Image extends ThemeComponent {
     props = this.props,
     state = this.state
   ) => {
+    const size = this._getDefinedSize()
     const { ratio } = props
     const { imageHeight, imageWidth } = state
-    const layoutHeight = props.height || state.layoutHeight || 0
-    const layoutWidth = props.width || state.layoutWidth || 0
-    let finalHeight = 0
-    let finalWidth = 0
-    switch (props.scaleType) {
-      case 'height':
-        finalHeight = layoutHeight
-        finalWidth = layoutHeight * imageWidth / imageHeight
-        if (ratio) {
-          finalWidth = finalHeight * ratio
-        }
-        break
-      case 'width':
-        finalHeight = layoutWidth * imageHeight / imageWidth
-        finalWidth = layoutWidth
-        if (ratio) {
-          finalHeight = finalWidth / ratio
-        }
-        break
-      default:
-        finalHeight = layoutHeight
-        finalWidth = layoutWidth
-        break
+    const layoutHeight = size.height || state.layoutHeight || 0
+    const layoutWidth = size.width || state.layoutWidth || 0
+    let finalHeight = size.height
+    let finalWidth = size.width
+    if (!finalHeight || !finalWidth) {
+      switch (props.scaleType) {
+        case 'height':
+          finalHeight = layoutHeight
+          finalWidth = layoutHeight * imageWidth / imageHeight
+          if (ratio) {
+            finalWidth = finalHeight * ratio
+          }
+          break
+        case 'width':
+          finalHeight = layoutWidth * imageHeight / imageWidth
+          finalWidth = layoutWidth
+          if (ratio) {
+            finalHeight = finalWidth / ratio
+          }
+          break
+        default:
+          finalHeight = layoutHeight
+          finalWidth = layoutWidth
+          break
+      }
     }
     finalHeight = finalHeight || 0
     finalWidth = finalWidth || 0
@@ -180,21 +195,46 @@ export default class Image extends ThemeComponent {
 }
 
 const Styles = StyleSheet.create(
-  (theme, { height, radius, style, width }, { finalHeight, finalWidth }) => {
-    finalHeight = finalHeight || height
-    finalWidth = finalWidth || width
+  (
+    theme,
+    {
+      borderTopLeftRadius,
+      borderTopRightRadius,
+      borderBottomLeftRadius,
+      borderBottomRightRadius,
+      height,
+      radius,
+      style = {},
+      width
+    },
+    { finalHeight, finalWidth }
+  ) => {
+    finalHeight = finalHeight || style.height || height
+    finalWidth = finalWidth || style.width || width
     const finalRadius =
       (radius === 'auto' ? Math.min(finalHeight, finalWidth) / 2 : radius) ||
       undefined
 
     const container = {
       borderRadius: finalRadius,
+      borderTopLeftRadius,
+      borderTopRightRadius,
+      borderBottomLeftRadius,
+      borderBottomRightRadius,
       height: finalHeight || undefined,
-      width: finalWidth || undefined,
-      ...style
+      width: finalWidth || undefined
     }
     return { container }
   },
-  ['height', 'radius', 'style', 'width'],
+  [
+    'borderTopLeftRadius',
+    'borderTopRightRadius',
+    'borderBottomLeftRadius',
+    'borderBottomRightRadius,',
+    'height',
+    'radius',
+    'style',
+    'width'
+  ],
   ['finalHeight', 'finalWidth']
 )

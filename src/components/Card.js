@@ -12,16 +12,16 @@ export default class Card extends ThemeComponent {
   }
 
   static propTypes = {
-    borderRadius: PropTypes.number
+    borderRadius: PropTypes.number,
+    elevation: PropTypes.number
   }
 
   render() {
     const { theme } = this.context
     const styles = Styles.get(theme, this.props)
+    const { elevation = theme.card.elevation } = this.props
     return (
-      <Elevation
-        fallbackStyle={styles.fallback}
-        elevation={theme.card.elevation}>
+      <Elevation fallbackStyle={styles.fallback} elevation={elevation}>
         <View style={styles.container}>
           {this.props.children}
         </View>

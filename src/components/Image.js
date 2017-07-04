@@ -12,6 +12,7 @@ export default class Image extends ThemeComponent {
     height: PropTypes.number,
     placeholder: PropTypes.imageSource,
     radius: PropTypes.imageRadius,
+    ratio: PropTypes.number,
     resizeMode: PropTypes.imageResizeMode,
     scaleType: PropTypes.imageScaleType,
     source: PropTypes.imageSource,
@@ -21,7 +22,7 @@ export default class Image extends ThemeComponent {
 
   static defaultProps = {
     radius: 'none',
-    resizeMode: 'contain',
+    resizeMode: 'cover',
     scaleType: 'width',
     onPress: () => {}
   }
@@ -50,8 +51,10 @@ export default class Image extends ThemeComponent {
       width: this._getWidth()
     })
     return (
-      <TouchableWithoutFeedback onPress={this._onPress}>
-        <View style={styles.container} onLayout={this._onLayout}>
+      <TouchableWithoutFeedback
+        onPress={this._onPress}
+        onLayout={this._onLayout}>
+        <View style={styles.container}>
           <RNImage
             style={styles.image}
             resizeMode={this.props.resizeMode}
@@ -134,9 +137,8 @@ export default class Image extends ThemeComponent {
     return this.props.width || this.state.width
   }
 
-  _onLayout = e => {
+  _onLayout = ({ nativeEvent: { layout } }) => {
     const { scaleType } = this.props
-    const { layout } = e.nativeEvent
     const image = this._getImage()
     if (!!image && !!image.uri) {
       if (!!image.width && !!image.height) {
@@ -161,6 +163,7 @@ const Styles = StyleSheet.create(
     { height: imageHeight, radius: imageRadius, width: imageWidth }
   ) => {
     const container = {
+      alignSelf: 'stretch',
       height,
       width,
       ...style

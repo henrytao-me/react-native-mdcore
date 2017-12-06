@@ -42,7 +42,10 @@ export default class Resolver {
 
   resolve(keys = []) {
     keys = Utils.isArray(keys) ? keys : keys.split('-')
-    const requestKey = `-${keys.filter(key => !!key).sort().join('-')}-`
+    const requestKey = `-${keys
+      .filter(key => !!key)
+      .sort()
+      .join('-')}-`
     return this._regexMap.reduce((acc, { key, regex }) => {
       if (requestKey && regex.test(requestKey)) {
         Utils.merge(acc, this._values[key])

@@ -1,5 +1,5 @@
 import React from 'react'
-import { TouchableWithoutFeedback, View } from 'react-native'
+import { TouchableOpacity, View } from 'react-native'
 
 import Elevation from './Elevation'
 import PropTypes from './PropTypes'
@@ -31,7 +31,7 @@ export default class Button extends ThemeComponent {
     const styles = Styles.get(theme, this.props)
     const elevation = this.props.type === 'raised' ? theme.button.elevation : 0
     return (
-      <TouchableWithoutFeedback>
+      <TouchableOpacity onPress={this.props.onPress}>
         <Elevation fallbackStyle={styles.fallback} elevation={elevation}>
           <View style={styles.container}>
             <Text
@@ -42,7 +42,7 @@ export default class Button extends ThemeComponent {
             />
           </View>
         </Elevation>
-      </TouchableWithoutFeedback>
+      </TouchableOpacity>
     )
   }
 

@@ -5,6 +5,7 @@ import {
   AppRegistry,
   AppState,
   Animated,
+  AsyncStorage,
   Dimensions,
   Easing,
   FlatList,
@@ -27,6 +28,7 @@ export {
   AppRegistry,
   AppState,
   Animated,
+  AsyncStorage,
   Dimensions,
   Easing,
   FlatList,
@@ -46,6 +48,7 @@ export {
   WebView
 }
 
+export { default as BackNative } from './BackNative'
 export { default as BottomNavigation } from './BottomNavigation'
 export {
   default as BottomNavigationContainer

@@ -60,13 +60,15 @@ class ThemeProvider extends PureComponent {
     const styles = Styles.get(undefined, this.props)
     return (
       <View style={styles.container} onLayout={this._onLayout}>
-        {this.state.ready &&
+        {this.state.ready && (
           <Loader
             {...configProps}
             onRender={this._onLoaderRender}
-            onUpdate={this._onLoaderUpdate}>
+            onUpdate={this._onLoaderUpdate}
+          >
             {this.props.children}
-          </Loader>}
+          </Loader>
+        )}
       </View>
     )
   }

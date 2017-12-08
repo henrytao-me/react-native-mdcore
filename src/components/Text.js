@@ -38,7 +38,8 @@ export default class Text extends ThemeComponent {
       <RNText
         style={styles.container}
         ellipsizeMode={this.props.ellipsizeMode}
-        numberOfLines={styles.numberOfLines}>
+        numberOfLines={styles.numberOfLines}
+      >
         {this.props.children || this.props.value}
       </RNText>
     )

@@ -43,12 +43,15 @@ export default class Toolbar extends ThemeComponent {
   render() {
     const { theme } = this.context
     const styles = Styles.get(theme, this.props)
-    const elevation = this.props.elevation || theme.toolbar.elevation
+    const elevation =
+      this.props.elevation === 0
+        ? 0
+        : this.props.elevation || theme.toolbar.elevation
     return (
       <Elevation elevation={elevation}>
         {this.props.statusBar}
         <View style={styles.container}>
-          {!!this.props.iconName &&
+          {!!this.props.iconName && (
             <IconToggle
               style={styles.icon}
               color={this.props.iconColor}
@@ -56,27 +59,30 @@ export default class Toolbar extends ThemeComponent {
               palette={this.props.palette}
               set={this.props.iconSet}
               onPress={this._onIconPress}
-            />}
-          {this.props.children ||
+            />
+          )}
+          {this.props.children || (
             <View style={styles.title}>
-              {!!this.props.title &&
+              {!!this.props.title && (
                 <Text
                   type={this.props.subtitle ? 'subhead2' : 'title'}
                   subType="primary"
                   palette={this.props.palette}
                   numberOfLines={1}
                   value={this.props.title}
-                />}
-              {!!this.props.subtitle &&
+                />
+              )}
+              {!!this.props.subtitle && (
                 <Text
                   type="body1"
                   subType="secondary"
                   palette={this.props.palette}
                   numberOfLines={1}
                   value={this.props.subtitle}
-                />}
-            </View>}
-          <View style={styles.shadow} />
+                />
+              )}
+            </View>
+          )}
         </View>
       </Elevation>
     )
@@ -123,15 +129,7 @@ const Styles = StyleSheet.create(
       paddingRight: theme.layout.spacing,
       justifyContent: 'center'
     }
-    const shadow = {
-      position: 'absolute',
-      left: 0,
-      right: 0,
-      bottom: 0,
-      height: theme.divider.size,
-      backgroundColor: theme.divider.color
-    }
-    return { container, icon, title, shadow }
+    return { container, icon, title }
   },
   ['extraSpace', 'iconName', 'palette', 'style']
 )

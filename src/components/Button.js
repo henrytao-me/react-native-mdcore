@@ -3,6 +3,7 @@ import { TouchableOpacity, View } from 'react-native'
 
 import Elevation from './Elevation'
 import PropTypes from './PropTypes'
+import Ripple from './Ripple'
 import StyleSheet from './StyleSheet'
 import Text from './Text'
 import ThemeComponent from './ThemeComponent'
@@ -16,6 +17,7 @@ export default class Button extends ThemeComponent {
 
   static propTypes = {
     palette: PropTypes.palette,
+    textColor: PropTypes.color,
     title: PropTypes.text.isRequired,
     type: PropTypes.oneOf(['flat', 'raised']),
     onPress: PropTypes.func.isRequired
@@ -31,8 +33,8 @@ export default class Button extends ThemeComponent {
     const styles = Styles.get(theme, this.props)
     const elevation = this.props.type === 'raised' ? theme.button.elevation : 0
     return (
-      <TouchableOpacity onPress={this.props.onPress}>
-        <Elevation fallbackStyle={styles.fallback} elevation={elevation}>
+      <Elevation fallbackStyle={styles.fallback} elevation={elevation}>
+        <Ripple onPress={this.props.onPress}>
           <View style={styles.container}>
             <Text
               color={styles.textColor}
@@ -41,8 +43,8 @@ export default class Button extends ThemeComponent {
               value={this._getTitle()}
             />
           </View>
-        </Elevation>
-      </TouchableOpacity>
+        </Ripple>
+      </Elevation>
     )
   }
 
@@ -55,7 +57,9 @@ export default class Button extends ThemeComponent {
 }
 
 const Styles = StyleSheet.create(
-  (theme, { palette, style, type }) => {
+  (theme, props) => {
+    const { palette, style, type } = props
+    const propTextColor = props.textColor
     const container = {
       alignItems: 'center',
       justifyContent: 'center',
@@ -83,7 +87,8 @@ const Styles = StyleSheet.create(
       container.backgroundColor = 'transparent'
       textColor = palette === 'background' ? undefined : theme.palette[palette]
     }
+    textColor = propTextColor || textColor
     return { container, fallback, textColor }
   },
-  ['palette', 'style', 'type']
+  ['palette', 'style', 'type', 'textColor']
 )

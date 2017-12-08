@@ -17,6 +17,7 @@ export default class IconToggle extends ThemeComponent {
     focus: PropTypes.bool,
     name: PropTypes.string.isRequired,
     palette: PropTypes.palette,
+    radius: PropTypes.number,
     set: PropTypes.string,
     size: PropTypes.number,
     touchable: PropTypes.bool,
@@ -24,6 +25,7 @@ export default class IconToggle extends ThemeComponent {
   }
 
   static defaultProps = {
+    radius: undefined,
     touchable: true,
     onPress: () => {}
   }
@@ -31,11 +33,17 @@ export default class IconToggle extends ThemeComponent {
   render() {
     const { theme } = this.context
     const styles = Styles.get(theme, this.props)
+    const radius =
+      this.props.radius === undefined
+        ? theme.iconToggle.size
+        : this.props.radius
     return (
       <Ripple
         style={styles.container}
+        radius={radius}
         touchable={this.props.touchable}
-        onPress={this._onPress}>
+        onPress={this._onPress}
+      >
         <Icon
           active={this.props.active}
           color={this.props.color}

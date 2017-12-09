@@ -2,12 +2,14 @@ import React from 'react'
 import { View } from 'react-native'
 
 import IconToggle from './IconToggle'
-import Image from './Image'
+// import Image from './Image'
 import PropTypes from './PropTypes'
 import Ripple from './Ripple'
 import StyleSheet from './StyleSheet'
 import Text from './Text'
 import ThemeComponent from './ThemeComponent'
+
+import { Image } from 'react-native'
 
 export default class ListItem extends ThemeComponent {
   static contextTypes = {
@@ -50,7 +52,8 @@ export default class ListItem extends ThemeComponent {
       <Ripple
         style={styles.container}
         touchable={this.props.touchable}
-        onPress={this.props.onPress}>
+        onPress={this.props.onPress}
+      >
         {this._renderText()}
         {this._renderAvatar()}
         {this._renderIcon()}
@@ -65,13 +68,14 @@ export default class ListItem extends ThemeComponent {
     const styles = Styles.get(this.context.theme, this.props)
     return (
       _hasAvatar(this.props.type) &&
-      !!this.props.avatar &&
-      <Image
-        style={styles.avatar}
-        placeholder={this.props.avatarPlaceholder}
-        radius={this.props.avatarRadius}
-        source={this.props.avatar}
-      />
+      !!this.props.avatar && (
+        <Image
+          style={styles.avatar}
+          // placeholder={this.props.avatarPlaceholder}
+          // radius={this.props.avatarRadius}
+          source={this.props.avatar}
+        />
+      )
     )
   }
 
@@ -82,15 +86,16 @@ export default class ListItem extends ThemeComponent {
     const styles = Styles.get(this.context.theme, this.props)
     return (
       _hasIcon(this.props.type) &&
-      !!this.props.icon &&
-      <IconToggle
-        style={styles.icon}
-        color={this.props.iconColor}
-        name={this.props.icon}
-        set={this.props.iconSet}
-        size={this.props.iconSize}
-        onPress={this.props.onIconPress}
-      />
+      !!this.props.icon && (
+        <IconToggle
+          style={styles.icon}
+          color={this.props.iconColor}
+          name={this.props.icon}
+          set={this.props.iconSet}
+          size={this.props.iconSize}
+          onPress={this.props.onIconPress}
+        />
+      )
     )
   }
 
@@ -102,7 +107,7 @@ export default class ListItem extends ThemeComponent {
     const styles = Styles.get(this.context.theme, this.props)
     return (
       <View style={styles.textWrapper}>
-        {!!this.props.text &&
+        {!!this.props.text && (
           <Text
             style={styles.text}
             color={this.props.textColor}
@@ -110,19 +115,21 @@ export default class ListItem extends ThemeComponent {
             subType="primary"
             type="subhead1"
             value={this.props.text}
-          />}
+          />
+        )}
         {!_isSingleLine(this.props.type) &&
-          !!this.props.secondaryText &&
-          <Text
-            style={styles.secondaryText}
-            color={this.props.secondaryTextColor}
-            numberOfLines={
-              this.props.secondaryTextMaxLines || maxLines.secondaryText
-            }
-            subType="secondary"
-            type="body1"
-            value={this.props.secondaryText}
-          />}
+          !!this.props.secondaryText && (
+            <Text
+              style={styles.secondaryText}
+              color={this.props.secondaryTextColor}
+              numberOfLines={
+                this.props.secondaryTextMaxLines || maxLines.secondaryText
+              }
+              subType="secondary"
+              type="body1"
+              value={this.props.secondaryText}
+            />
+          )}
       </View>
     )
   }
